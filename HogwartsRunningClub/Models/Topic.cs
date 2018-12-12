@@ -39,6 +39,9 @@ namespace HogwartsRunningClub.Models
 
         public TopicCategory TopicCategory { get; set; }
 
+        [Required]
+        public ApplicationUser User { get; set; }
+
         public virtual ICollection<Comment> Comments { get; set; }
 
     }

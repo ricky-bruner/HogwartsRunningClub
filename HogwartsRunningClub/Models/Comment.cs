@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HogwartsRunningClub.Models
 {
@@ -13,6 +15,12 @@ namespace HogwartsRunningClub.Models
         public string Content { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [Display(Name = "Date Created")]
+        public DateTime DateCreated { get; set; }
+
+        [Required]
         public string UserId { get; set; }
 
         [Required]
@@ -20,6 +28,7 @@ namespace HogwartsRunningClub.Models
 
         public Topic Topic { get; set; }
 
+        [Required]
         public ApplicationUser User { get; set; }
 
     }

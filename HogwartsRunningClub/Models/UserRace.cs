@@ -21,6 +21,8 @@ namespace HogwartsRunningClub.Models
 
 
         public Race Race { get; set; }
+        
+        [Required]
         public ApplicationUser User { get; set; }
 
     }

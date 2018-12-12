@@ -25,7 +25,6 @@ namespace HogwartsRunningClub.Models
         [Display(Name = "Distance")]
         public double Distance { get; set; }
 
-        [Required]
         public string MedalImage { get; set; }
 
         public virtual ICollection<UserRace> RaceParticipants { get; set; }
