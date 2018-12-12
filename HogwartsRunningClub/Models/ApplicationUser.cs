@@ -42,7 +42,7 @@ namespace HogwartsRunningClub.Models
 
         public virtual ICollection<Workout> UserWorkouts { get; set; }
 
-        public virtual ICollection<Race> UserRaces { get; set; }
+        public virtual ICollection<UserRace> UserRaces { get; set; }
 
     }
 }
