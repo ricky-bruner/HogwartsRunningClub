@@ -28,6 +28,13 @@ body {
     margin: 15px;
 }
 
+
+.register-form-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */
