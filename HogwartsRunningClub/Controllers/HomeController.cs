@@ -9,6 +9,7 @@ using HogwartsRunningClub.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using HogwartsRunningClub.Models.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace HogwartsRunningClub.Controllers
 {
@@ -36,6 +37,9 @@ namespace HogwartsRunningClub.Controllers
 
             user.UserTopics = _context.Topic.Where(t => t.UserId == user.Id).ToList();
             user.House = _context.House.FirstOrDefault(h => h.HouseId == user.HouseId);
+            user.UserRaces = _context.UserRace
+                                .Include(ur => ur.Race)
+                                .Where(ur => ur.UserId == user.Id).ToList();
             
             return View(user);
         }
