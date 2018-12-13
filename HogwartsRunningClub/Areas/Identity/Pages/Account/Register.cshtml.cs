@@ -40,6 +40,31 @@ namespace HogwartsRunningClub.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            
+            [Required]
+            [Display(Name = "First Name")]
+            [StringLength(55, ErrorMessage = "Please shorten the product title to 55 characters")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [Display(Name = "Last Name")]
+            [StringLength(55, ErrorMessage = "Please shorten the product title to 55 characters")]
+            public string LastName { get; set; }
+
+            [Required]
+            [Display(Name = "Wizarding World Name")]
+            [StringLength(35, ErrorMessage = "Please shorten the product title to 35 characters")]
+            public string PotterName { get; set; }
+
+            [Required]
+            [Display(Name = "Location")]
+            public string Location { get; set; }
+
+            [Required]
+            [Range(0, int.MaxValue, ErrorMessage = "Miles entered must be anything from 0 and above.")]
+            [Display(Name = "Miles Run For HRC prior to Registering")]
+            public double MilesRun { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -67,7 +92,7 @@ namespace HogwartsRunningClub.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName, PotterName = Input.PotterName, Location = Input.Location, MilesRun = Input.MilesRun };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

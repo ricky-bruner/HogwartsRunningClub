@@ -78,6 +78,11 @@ namespace HogwartsRunningClub.Data
                 .WithOne(rp => rp.Race)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<House>()
+                .HasMany(h => h.HouseUsers)
+                .WithOne(hu => hu.House)
+                .OnDelete(DeleteBehavior.Restrict);
+
             ApplicationUser user = new ApplicationUser
             {
                 FirstName = "admin",
@@ -460,8 +465,65 @@ namespace HogwartsRunningClub.Data
                 }
             );
 
+            modelBuilder.Entity<UserRace>().HasData(
+                new UserRace() 
+                { 
+                    UserRaceId = 1,
+                    UserId = user.Id,
+                    RaceId = 1
+                },
+                new UserRace()
+                {
+                    UserRaceId = 2,
+                    UserId = user.Id,
+                    RaceId = 2
+                },
+                new UserRace()
+                {
+                    UserRaceId = 3,
+                    UserId = user.Id,
+                    RaceId = 3
+                },
+                new UserRace()
+                {
+                    UserRaceId = 4,
+                    UserId = user.Id,
+                    RaceId = 4
+                },
+                new UserRace()
+                {
+                    UserRaceId = 5,
+                    UserId = user.Id,
+                    RaceId = 5
+                },
+                new UserRace()
+                {
+                    UserRaceId = 6,
+                    UserId = user.Id,
+                    RaceId = 6
+                }
+            );
 
-
+            modelBuilder.Entity<Topic>().HasData(
+                new Topic() 
+                { 
+                    TopicId = 1,
+                    TopicCategoryId = 10,
+                    UserId = user.Id,
+                    HouseExclusive = false,
+                    Title = "J.K. Rowling to pen Adult Potter Novels!?",
+                    Content = "There is a rumor going around that once JK finishes writing the Fantastic Beasts Scripts, she will begin writing adult Potter novels! The rumor also claims that it will pretain to Harry being an Auror, Cursed Child being retconned, and somehow tie into the Fantastic Beast series. I believe that something may be going on with the whole obscurus/voldemort connection!"
+                },
+                new Topic()
+                {
+                    TopicId = 2,
+                    TopicCategoryId = 2,
+                    UserId = user.Id,
+                    HouseExclusive = true,
+                    Title = "Aruleus Dumbledore is the Obscurus or Ariana!",
+                    Content = "This is the only thing that makes sense! Discuss!"
+                }
+            );
 
         }
     }

@@ -14,7 +14,6 @@ namespace HogwartsRunningClub.Models
         [Required]
         public int RaceId { get; set; }
 
-        [Required]
         public string RaceBib { get; set; }
 
         public string RaceBibImage { get; set; }

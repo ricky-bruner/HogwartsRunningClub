@@ -31,7 +31,8 @@ namespace HogwartsRunningClub.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime DateRegistered { get; set; }
 
-        public int HouseId { get; set; }
+
+        public int? HouseId { get; set; }
 
         public string ImagePath { get; set; }
 
