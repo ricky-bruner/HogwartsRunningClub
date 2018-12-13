@@ -12,6 +12,7 @@ namespace HogwartsRunningClub.Models.ViewModels
 
         public List<House> Houses { get; set; }
 
+        public int SelectedHouseId { get; set; }
 
     }
 }

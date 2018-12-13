@@ -27,29 +27,57 @@ namespace HogwartsRunningClub.Controllers
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
+
+        // Index action that serves as the Users Profile Page.
         public async Task<IActionResult> Index()
         {
 
             ApplicationUser user = await GetCurrentUserAsync();
 
             user.UserTopics = _context.Topic.Where(t => t.UserId == user.Id).ToList();
+            user.House = _context.House.FirstOrDefault(h => h.HouseId == user.HouseId);
             
             return View(user);
         }
 
+
+        // Method to load Sorting Page for User
         public async Task<IActionResult> SortingHat() 
         {
             
             ApplicationUser user = await GetCurrentUserAsync();
 
-            List<House> Houses = _context.House.ToList();
+            if (user.HouseId == null) 
+            { 
+                List<House> Houses = _context.House.ToList();
 
-            SortingHatViewModel viewmodel = new SortingHatViewModel();
+                SortingHatViewModel viewmodel = new SortingHatViewModel();
 
-            viewmodel.User = user;
-            viewmodel.Houses = Houses;
+                viewmodel.User = user;
+                viewmodel.Houses = Houses;
 
-            return View(viewmodel);
+                return View(viewmodel);
+            
+            }
+
+            return RedirectToAction("Index");
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SortingHat(SortingHatViewModel viewmodel) 
+        {
+
+
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            user.HouseId = viewmodel.SelectedHouseId;
+
+            _context.ApplicationUser.Update(user);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
 
         }
 

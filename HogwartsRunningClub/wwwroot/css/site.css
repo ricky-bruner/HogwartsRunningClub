@@ -41,32 +41,44 @@ body {
     margin-bottom: 4em;
 }
 
-.card-Gryffindor {
-    color: goldenrod;
-    background: darkred;
+.house-card {
     padding: .5em;
     margin: .5em;
+    border-radius: 10px;
+    box-shadow: 0 8px 6px -6px rgba(0,0,0, .5);
+}
+
+    .house-card button {
+        color: black;
+    
+    }
+
+.card-Gryffindor {
+    color: goldenrod;
+    background: #333333; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #333333, #dd1818); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to top, #333333, #dd1818);
 }
 
 .card-Hufflepuff {
     color: black;
-    background: gold;
-    padding: .5em;
-    margin: .5em;
+    background: #fffc00; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #fffc00, gold); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #fffc00, gold, darkgoldenrod);
 }
 
 .card-Ravenclaw {
     color: silver;
-    background: darkblue;
-    padding: .5em;
-    margin: .5em;
+    background: #373b44; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #373b44, #4286f4); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #373b44, #4286f4);
 }
 
 .card-Slytherin {
     color: silver;
-    background: darkgreen;
-    padding: .5em;
-    margin: .5em;
+    background: #000000; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #000000, #0f9b0f); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #000000, #0f9b0f);
 }
 
 

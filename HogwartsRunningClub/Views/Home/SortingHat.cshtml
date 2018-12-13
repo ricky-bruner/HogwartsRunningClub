@@ -13,11 +13,14 @@
     <div class="sorting-house-container">
         @foreach (House house in Model.Houses) 
          { 
-            <div class="col-md-5 card-@house.Title">
-                <h3>@house.Title</h3>
-                <p>@house.Description</p>
-                <p>Total Miles Ran for this House: @house.TotalMiles</p>
-                <button>Choose @house.Title</button>
+            <div class="col-md-5 house-card card-@house.Title">
+                <form asp-action="SortingHat">
+                    <input type="hidden" asp-for="@Model.SelectedHouseId" value="@house.HouseId"/>
+                    <h3>@house.Title</h3>
+                    <p>@house.Description</p>
+                    <p>Total Miles Ran for this House: @house.TotalMiles</p>
+                    <button class="btn">Choose @house.Title</button>
+                </form>
             </div>
          }
     </div>
