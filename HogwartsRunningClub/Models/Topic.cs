@@ -31,6 +31,9 @@ namespace HogwartsRunningClub.Models
         public DateTime DateCreated { get; set; }
 
         [Required]
+        public int TotalViews { get; set; }
+
+        [Required]
         [Display(Name = "Exclusive to House?")]
         public bool HouseExclusive { get; set; }
 

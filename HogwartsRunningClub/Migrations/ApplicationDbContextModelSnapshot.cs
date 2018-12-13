@@ -156,6 +156,8 @@ namespace HogwartsRunningClub.Migrations
 
                     b.Property<int>("TopicCategoryId");
 
+                    b.Property<int>("TotalViews");
+
                     b.Property<string>("UserId")
                         .IsRequired();
 
@@ -168,8 +170,8 @@ namespace HogwartsRunningClub.Migrations
                     b.ToTable("Topic");
 
                     b.HasData(
-                        new { TopicId = 1, Content = "There is a rumor going around that once JK finishes writing the Fantastic Beasts Scripts, she will begin writing adult Potter novels! The rumor also claims that it will pretain to Harry being an Auror, Cursed Child being retconned, and somehow tie into the Fantastic Beast series. I believe that something may be going on with the whole obscurus/voldemort connection!", DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), HouseExclusive = false, Title = "J.K. Rowling to pen Adult Potter Novels!?", TopicCategoryId = 10, UserId = "2985541a-36e1-4172-aa7d-ef2645a46b32" },
-                        new { TopicId = 2, Content = "This is the only thing that makes sense! Discuss!", DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), HouseExclusive = true, Title = "Aruleus Dumbledore is the Obscurus or Ariana!", TopicCategoryId = 2, UserId = "2985541a-36e1-4172-aa7d-ef2645a46b32" }
+                        new { TopicId = 1, Content = "There is a rumor going around that once JK finishes writing the Fantastic Beasts Scripts, she will begin writing adult Potter novels! The rumor also claims that it will pretain to Harry being an Auror, Cursed Child being retconned, and somehow tie into the Fantastic Beast series. I believe that something may be going on with the whole obscurus/voldemort connection!", DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), HouseExclusive = false, Title = "J.K. Rowling to pen Adult Potter Novels!?", TopicCategoryId = 10, TotalViews = 0, UserId = "68be530e-98af-4a45-95b5-15d9160af879" },
+                        new { TopicId = 2, Content = "This is the only thing that makes sense! Discuss!", DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), HouseExclusive = true, Title = "Aruleus Dumbledore is the Obscurus or Ariana!", TopicCategoryId = 2, TotalViews = 0, UserId = "68be530e-98af-4a45-95b5-15d9160af879" }
                     );
                 });
 
@@ -224,12 +226,12 @@ namespace HogwartsRunningClub.Migrations
                     b.ToTable("UserRace");
 
                     b.HasData(
-                        new { UserRaceId = 1, RaceId = 1, UserId = "2985541a-36e1-4172-aa7d-ef2645a46b32" },
-                        new { UserRaceId = 2, RaceId = 2, UserId = "2985541a-36e1-4172-aa7d-ef2645a46b32" },
-                        new { UserRaceId = 3, RaceId = 3, UserId = "2985541a-36e1-4172-aa7d-ef2645a46b32" },
-                        new { UserRaceId = 4, RaceId = 4, UserId = "2985541a-36e1-4172-aa7d-ef2645a46b32" },
-                        new { UserRaceId = 5, RaceId = 5, UserId = "2985541a-36e1-4172-aa7d-ef2645a46b32" },
-                        new { UserRaceId = 6, RaceId = 6, UserId = "2985541a-36e1-4172-aa7d-ef2645a46b32" }
+                        new { UserRaceId = 1, RaceId = 1, UserId = "68be530e-98af-4a45-95b5-15d9160af879" },
+                        new { UserRaceId = 2, RaceId = 2, UserId = "68be530e-98af-4a45-95b5-15d9160af879" },
+                        new { UserRaceId = 3, RaceId = 3, UserId = "68be530e-98af-4a45-95b5-15d9160af879" },
+                        new { UserRaceId = 4, RaceId = 4, UserId = "68be530e-98af-4a45-95b5-15d9160af879" },
+                        new { UserRaceId = 5, RaceId = 5, UserId = "68be530e-98af-4a45-95b5-15d9160af879" },
+                        new { UserRaceId = 6, RaceId = 6, UserId = "68be530e-98af-4a45-95b5-15d9160af879" }
                     );
                 });
 
@@ -445,9 +447,6 @@ namespace HogwartsRunningClub.Migrations
 
                     b.Property<double>("MilesRun");
 
-                    b.Property<string>("PotterName")
-                        .IsRequired();
-
                     b.HasIndex("HouseId");
 
                     b.ToTable("ApplicationUser");
@@ -455,7 +454,7 @@ namespace HogwartsRunningClub.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
 
                     b.HasData(
-                        new { Id = "2985541a-36e1-4172-aa7d-ef2645a46b32", AccessFailedCount = 0, ConcurrencyStamp = "729df9d5-f548-4885-8062-c7451e70f880", Email = "admin@admin.com", EmailConfirmed = true, LockoutEnabled = false, NormalizedEmail = "ADMIN@ADMIN.COM", NormalizedUserName = "ADMIN@ADMIN.COM", PasswordHash = "AQAAAAEAACcQAAAAEDvp3MUYd7FQAbilY+U1LOstaIdkvqFqxgmbDZUmOQqKmE1PuQHhU7F2ALvaLKVwog==", PhoneNumberConfirmed = false, SecurityStamp = "4414c7ff-b04c-4a5e-91c3-f0369c6d5693", TwoFactorEnabled = false, UserName = "admin@admin.com", DateRegistered = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), FirstName = "admin", LastName = "admin", Location = "Nashville, TN", MilesRun = 134.8, PotterName = "Admina Straytor" }
+                        new { Id = "68be530e-98af-4a45-95b5-15d9160af879", AccessFailedCount = 0, ConcurrencyStamp = "c70ee41e-34da-43ff-bb2b-803a686db1e1", Email = "admin@admin.com", EmailConfirmed = true, LockoutEnabled = false, NormalizedEmail = "ADMIN@ADMIN.COM", NormalizedUserName = "ADMIN@ADMIN.COM", PasswordHash = "AQAAAAEAACcQAAAAENl8AtMvtVhWK0RHKBX44oApIhtIGruMan//T8BNcxnmO3wyePQZYkMa6h6+P1PenA==", PhoneNumberConfirmed = false, SecurityStamp = "a65eecf7-9650-453f-8d28-c318933813b9", TwoFactorEnabled = false, UserName = "Admina Straytor", DateRegistered = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), FirstName = "admin", LastName = "admin", Location = "Nashville, TN", MilesRun = 134.8 }
                     );
                 });
 

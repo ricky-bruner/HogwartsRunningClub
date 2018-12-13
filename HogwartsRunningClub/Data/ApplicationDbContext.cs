@@ -87,10 +87,9 @@ namespace HogwartsRunningClub.Data
             {
                 FirstName = "admin",
                 LastName = "admin",
-                PotterName = "Admina Straytor",
+                UserName = "AdminaStraytor",
                 Location = "Nashville, TN",
                 MilesRun = 134.8,
-                UserName = "admin@admin.com",
                 NormalizedUserName = "ADMIN@ADMIN.COM",
                 Email = "admin@admin.com",
                 NormalizedEmail = "ADMIN@ADMIN.COM",
@@ -510,6 +509,7 @@ namespace HogwartsRunningClub.Data
                     TopicId = 1,
                     TopicCategoryId = 10,
                     UserId = user.Id,
+                    TotalViews = 0,
                     HouseExclusive = false,
                     Title = "J.K. Rowling to pen Adult Potter Novels!?",
                     Content = "There is a rumor going around that once JK finishes writing the Fantastic Beasts Scripts, she will begin writing adult Potter novels! The rumor also claims that it will pretain to Harry being an Auror, Cursed Child being retconned, and somehow tie into the Fantastic Beast series. I believe that something may be going on with the whole obscurus/voldemort connection!"
@@ -519,6 +519,7 @@ namespace HogwartsRunningClub.Data
                     TopicId = 2,
                     TopicCategoryId = 2,
                     UserId = user.Id,
+                    TotalViews = 0,
                     HouseExclusive = true,
                     Title = "Aruleus Dumbledore is the Obscurus or Ariana!",
                     Content = "This is the only thing that makes sense! Discuss!"

@@ -110,7 +110,6 @@ namespace HogwartsRunningClub.Migrations
                     Discriminator = table.Column<string>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
-                    PotterName = table.Column<string>(nullable: true),
                     DateRegistered = table.Column<DateTime>(nullable: true, defaultValueSql: "GETDATE()"),
                     HouseId = table.Column<int>(nullable: true),
                     ImagePath = table.Column<string>(nullable: true),
@@ -223,6 +222,7 @@ namespace HogwartsRunningClub.Migrations
                     Content = table.Column<string>(maxLength: 1500, nullable: false),
                     UserId = table.Column<string>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false, defaultValueSql: "GETDATE()"),
+                    TotalViews = table.Column<int>(nullable: false),
                     HouseExclusive = table.Column<bool>(nullable: false),
                     TopicCategoryId = table.Column<int>(nullable: false)
                 },
@@ -322,8 +322,8 @@ namespace HogwartsRunningClub.Migrations
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName", "DateRegistered", "FirstName", "HouseId", "ImagePath", "LastName", "Location", "MilesRun", "PotterName" },
-                values: new object[] { "2985541a-36e1-4172-aa7d-ef2645a46b32", 0, "729df9d5-f548-4885-8062-c7451e70f880", "ApplicationUser", "admin@admin.com", true, false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEDvp3MUYd7FQAbilY+U1LOstaIdkvqFqxgmbDZUmOQqKmE1PuQHhU7F2ALvaLKVwog==", null, false, "4414c7ff-b04c-4a5e-91c3-f0369c6d5693", false, "admin@admin.com", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin", null, null, "admin", "Nashville, TN", 134.8, "Admina Straytor" });
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName", "DateRegistered", "FirstName", "HouseId", "ImagePath", "LastName", "Location", "MilesRun" },
+                values: new object[] { "68be530e-98af-4a45-95b5-15d9160af879", 0, "c70ee41e-34da-43ff-bb2b-803a686db1e1", "ApplicationUser", "admin@admin.com", true, false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAENl8AtMvtVhWK0RHKBX44oApIhtIGruMan//T8BNcxnmO3wyePQZYkMa6h6+P1PenA==", null, false, "a65eecf7-9650-453f-8d28-c318933813b9", false, "Admina Straytor", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin", null, null, "admin", "Nashville, TN", 134.8 });
 
             migrationBuilder.InsertData(
                 table: "House",
@@ -397,11 +397,11 @@ namespace HogwartsRunningClub.Migrations
 
             migrationBuilder.InsertData(
                 table: "Topic",
-                columns: new[] { "TopicId", "Content", "DateCreated", "HouseExclusive", "Title", "TopicCategoryId", "UserId" },
+                columns: new[] { "TopicId", "Content", "DateCreated", "HouseExclusive", "Title", "TopicCategoryId", "TotalViews", "UserId" },
                 values: new object[,]
                 {
-                    { 2, "This is the only thing that makes sense! Discuss!", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Aruleus Dumbledore is the Obscurus or Ariana!", 2, "2985541a-36e1-4172-aa7d-ef2645a46b32" },
-                    { 1, "There is a rumor going around that once JK finishes writing the Fantastic Beasts Scripts, she will begin writing adult Potter novels! The rumor also claims that it will pretain to Harry being an Auror, Cursed Child being retconned, and somehow tie into the Fantastic Beast series. I believe that something may be going on with the whole obscurus/voldemort connection!", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "J.K. Rowling to pen Adult Potter Novels!?", 10, "2985541a-36e1-4172-aa7d-ef2645a46b32" }
+                    { 2, "This is the only thing that makes sense! Discuss!", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Aruleus Dumbledore is the Obscurus or Ariana!", 2, 0, "68be530e-98af-4a45-95b5-15d9160af879" },
+                    { 1, "There is a rumor going around that once JK finishes writing the Fantastic Beasts Scripts, she will begin writing adult Potter novels! The rumor also claims that it will pretain to Harry being an Auror, Cursed Child being retconned, and somehow tie into the Fantastic Beast series. I believe that something may be going on with the whole obscurus/voldemort connection!", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "J.K. Rowling to pen Adult Potter Novels!?", 10, 0, "68be530e-98af-4a45-95b5-15d9160af879" }
                 });
 
             migrationBuilder.InsertData(
@@ -409,12 +409,12 @@ namespace HogwartsRunningClub.Migrations
                 columns: new[] { "UserRaceId", "RaceBib", "RaceBibImage", "RaceId", "UserId" },
                 values: new object[,]
                 {
-                    { 1, null, null, 1, "2985541a-36e1-4172-aa7d-ef2645a46b32" },
-                    { 2, null, null, 2, "2985541a-36e1-4172-aa7d-ef2645a46b32" },
-                    { 3, null, null, 3, "2985541a-36e1-4172-aa7d-ef2645a46b32" },
-                    { 4, null, null, 4, "2985541a-36e1-4172-aa7d-ef2645a46b32" },
-                    { 5, null, null, 5, "2985541a-36e1-4172-aa7d-ef2645a46b32" },
-                    { 6, null, null, 6, "2985541a-36e1-4172-aa7d-ef2645a46b32" }
+                    { 1, null, null, 1, "68be530e-98af-4a45-95b5-15d9160af879" },
+                    { 2, null, null, 2, "68be530e-98af-4a45-95b5-15d9160af879" },
+                    { 3, null, null, 3, "68be530e-98af-4a45-95b5-15d9160af879" },
+                    { 4, null, null, 4, "68be530e-98af-4a45-95b5-15d9160af879" },
+                    { 5, null, null, 5, "68be530e-98af-4a45-95b5-15d9160af879" },
+                    { 6, null, null, 6, "68be530e-98af-4a45-95b5-15d9160af879" }
                 });
 
             migrationBuilder.CreateIndex(

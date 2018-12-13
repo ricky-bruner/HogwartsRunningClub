@@ -54,7 +54,7 @@ namespace HogwartsRunningClub.Areas.Identity.Pages.Account
             [Required]
             [Display(Name = "Wizarding World Name")]
             [StringLength(35, ErrorMessage = "Please shorten the product title to 35 characters")]
-            public string PotterName { get; set; }
+            public string UserName { get; set; }
 
             [Required]
             [Display(Name = "Location")]
@@ -92,7 +92,7 @@ namespace HogwartsRunningClub.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName, PotterName = Input.PotterName, Location = Input.Location, MilesRun = Input.MilesRun };
+                var user = new ApplicationUser { UserName = Input.UserName, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName, Location = Input.Location, MilesRun = Input.MilesRun };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
