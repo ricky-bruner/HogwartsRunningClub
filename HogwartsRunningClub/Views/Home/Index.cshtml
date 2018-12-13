@@ -1,5 +1,32 @@
-﻿@{
+﻿@model HogwartsRunningClub.Models.ApplicationUser
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<h2>Welcome to the Hogwarts Running Club!</h2>
+<h2>Welcome to the Hogwarts Running Club, @Model.UserName!</h2>
+@if (Model.HouseId == null) 
+ { 
+    <a asp-action="SortingHat" class="btn btn-info">Sort</a>
+ }
+
+<p>House: @Model.House.Title</p>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <p>Race Collection: </p>
+        @foreach (UserRace medal in Model.UserRaces) 
+         { 
+            <p>@medal.Race.Title</p>
+         }
+
+    </div>
+
+    <div class="cold-md-6">
+        @foreach (Topic topic in Model.UserTopics) 
+         { 
+            <p>@topic.Title - @Model.UserName</p>
+         }
+    </div>
+</div>
+

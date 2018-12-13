@@ -5,29 +5,87 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using HogwartsRunningClub.Models;
+using HogwartsRunningClub.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using HogwartsRunningClub.Models.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace HogwartsRunningClub.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public HomeController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
-            return View();
+            _context = context;
+            _userManager = userManager;
         }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-            return View();
+
+        // Index action that serves as the Users Profile Page.
+        public async Task<IActionResult> Index()
+        {
+
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            user.UserTopics = _context.Topic.Where(t => t.UserId == user.Id).ToList();
+            user.House = _context.House.FirstOrDefault(h => h.HouseId == user.HouseId);
+            user.UserRaces = _context.UserRace
+                                .Include(ur => ur.Race)
+                                .Where(ur => ur.UserId == user.Id).ToList();
+            
+            return View(user);
         }
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
 
-            return View();
+        // Method to load Sorting Page for User
+        public async Task<IActionResult> SortingHat() 
+        {
+            
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            if (user.HouseId == null) 
+            { 
+                List<House> Houses = _context.House.ToList();
+
+                SortingHatViewModel viewmodel = new SortingHatViewModel();
+
+                viewmodel.User = user;
+                viewmodel.Houses = Houses;
+
+                return View(viewmodel);
+            
+            }
+
+            return RedirectToAction("Index");
+
         }
+
+        [HttpPost]
+        public async Task<IActionResult> SortingHat(SortingHatViewModel viewmodel) 
+        {
+
+
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            user.HouseId = viewmodel.SelectedHouseId;
+
+            _context.ApplicationUser.Update(user);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+
+        }
+
+        
 
         public IActionResult Privacy()
         {
