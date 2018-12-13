@@ -5,29 +5,55 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using HogwartsRunningClub.Models;
+using HogwartsRunningClub.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using HogwartsRunningClub.Models.ViewModels;
 
 namespace HogwartsRunningClub.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public HomeController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
-            return View();
+            _context = context;
+            _userManager = userManager;
         }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-            return View();
+        public async Task<IActionResult> Index()
+        {
+
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            user.UserTopics = _context.Topic.Where(t => t.UserId == user.Id).ToList();
+            
+            return View(user);
         }
 
-        public IActionResult Contact()
+        public async Task<IActionResult> SortingHat() 
         {
-            ViewData["Message"] = "Your contact page.";
+            
+            ApplicationUser user = await GetCurrentUserAsync();
 
-            return View();
+            List<House> Houses = _context.House.ToList();
+
+            SortingHatViewModel viewmodel = new SortingHatViewModel();
+
+            viewmodel.User = user;
+            viewmodel.Houses = Houses;
+
+            return View(viewmodel);
+
         }
+
+        
 
         public IActionResult Privacy()
         {

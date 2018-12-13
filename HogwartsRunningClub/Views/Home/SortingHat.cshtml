@@ -1,0 +1,26 @@
+﻿@model HogwartsRunningClub.Models.ViewModels.SortingHatViewModel
+
+@{
+    ViewData["Title"] = "Sorting Hat";
+}
+
+<h2>Sorting Hat</h2>
+
+<div class="col-md-12">
+    <h2>Every which or wizard belong to a Hogwarts House, not matter where they are from!</h2>
+    <h3>The Sorting Hat gives input into which House a witch or wizard belongs, but ultimately, we all have a choice in who we are and where we belong. Which that knowledge, we welcom you to choose where your allegiances lie, @Model.User.UserName!</h3>
+    <hr />
+    <div class="sorting-house-container">
+        @foreach (House house in Model.Houses) 
+         { 
+            <div class="col-md-5 card-@house.Title">
+                <h3>@house.Title</h3>
+                <p>@house.Description</p>
+                <p>Total Miles Ran for this House: @house.TotalMiles</p>
+                <button>Choose @house.Title</button>
+            </div>
+         }
+    </div>
+    <hr />
+    <hr />
+</div>

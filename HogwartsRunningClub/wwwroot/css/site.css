@@ -34,6 +34,41 @@ body {
     justify-content: space-around;
 }
 
+.sorting-house-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-bottom: 4em;
+}
+
+.card-Gryffindor {
+    color: goldenrod;
+    background: darkred;
+    padding: .5em;
+    margin: .5em;
+}
+
+.card-Hufflepuff {
+    color: black;
+    background: gold;
+    padding: .5em;
+    margin: .5em;
+}
+
+.card-Ravenclaw {
+    color: silver;
+    background: darkblue;
+    padding: .5em;
+    margin: .5em;
+}
+
+.card-Slytherin {
+    color: silver;
+    background: darkgreen;
+    padding: .5em;
+    margin: .5em;
+}
+
 
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
