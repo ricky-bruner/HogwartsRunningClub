@@ -36,7 +36,12 @@ namespace HogwartsRunningClub.Controllers
             ApplicationUser user = await GetCurrentUserAsync();
 
             user.UserTopics = _context.Topic.Where(t => t.UserId == user.Id).ToList();
-            user.House = _context.House.FirstOrDefault(h => h.HouseId == user.HouseId);
+
+            if (user.HouseId != null) 
+            { 
+                user.House = _context.House.FirstOrDefault(h => h.HouseId == user.HouseId);
+            }
+
             user.UserRaces = _context.UserRace
                                 .Include(ur => ur.Race)
                                 .Where(ur => ur.UserId == user.Id).ToList();
@@ -85,6 +90,21 @@ namespace HogwartsRunningClub.Controllers
 
         }
 
+
+        public async Task<IActionResult> ViewGreatHall() 
+        {
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            GreatHallViewModel viewmodel = new GreatHallViewModel
+            {
+                User = user,
+                NonExclusiveTopics = _context.Topic.Where(t => t.HouseExclusive == false).ToList(),
+                Houses = _context.House.ToList(),
+                TopicCategories = _context.TopicCategory.ToList()
+            };
+
+            return View("GreatHall", viewmodel);
+        }
         
 
         public IActionResult Privacy()
