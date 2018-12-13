@@ -22,10 +22,6 @@ namespace HogwartsRunningClub.Models
         public string LastName { get; set; }
 
         [Required]
-        [Display(Name = "Wizarding World Name")]
-        public string PotterName { get; set; }
-
-        [Required]
         [Display(Name = "Date Registered")]
         [DataType(DataType.Date)]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
