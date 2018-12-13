@@ -18,3 +18,8 @@ The hope for the future is to give users a common area to post images and status
 
 Until more build-out is complete, this remains the sole plan!
 
+### The Code Plan
+
+Current ERD:
+![MVP ERD](https://github.com/ricky-bruner/HogwartsRunningClub/blob/master/HogwartsRunningClubERD.png?raw=true)
+
