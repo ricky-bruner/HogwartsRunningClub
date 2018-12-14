@@ -98,9 +98,14 @@ namespace HogwartsRunningClub.Controllers
             GreatHallViewModel viewmodel = new GreatHallViewModel
             {
                 User = user,
-                NonExclusiveTopics = _context.Topic.OrderByDescending(t => t.DateCreated).Where(t => t.HouseExclusive == false).ToList(),
-                Houses = _context.House.ToList(),
-                TopicCategories = _context.TopicCategory.ToList()
+                NonExclusiveTopics = await _context.Topic
+                    .Include(t => t.User)
+                    .ThenInclude(u => u.House)
+                    .OrderByDescending(t => t.DateCreated)
+                    .Where(t => t.HouseExclusive == false)
+                    .ToListAsync(),
+                Houses = await _context.House.ToListAsync(),
+                TopicCategories = await _context.TopicCategory.ToListAsync()
             };
 
             return View("GreatHall", viewmodel);
