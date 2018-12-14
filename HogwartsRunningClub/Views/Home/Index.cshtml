@@ -9,8 +9,10 @@
  { 
     <a asp-action="SortingHat" class="btn btn-info">Sort</a>
  }
-
-<p>House: @Model.House.Title</p>
+@if (Model.HouseId != null) 
+ { 
+    <p>House: @Model.House.Title</p>
+ }
 <hr />
 <div class="row">
     <div class="col-md-6">

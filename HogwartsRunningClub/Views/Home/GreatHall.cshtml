@@ -1,0 +1,20 @@
+﻿@model HogwartsRunningClub.Models.ViewModels.GreatHallViewModel
+
+
+@{
+    ViewData["Title"] = "Great Hall";
+}
+
+<h2>Great Hall</h2>
+
+<div class="row col-md-12">
+    <div class="cold-md-9">
+        @foreach (Topic topic in Model.NonExclusiveTopics) 
+         { 
+            <p>
+                <a asp-controller="Topics" asp-action="Details" asp-route-id="@topic.TopicId">@topic.Title</a> <span>@topic.User.UserName</span>
+            </p>
+         }
+    </div>
+</div>
+

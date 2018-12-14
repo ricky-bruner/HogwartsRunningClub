@@ -35,12 +35,6 @@
             @Html.DisplayFor(model => model.TotalViews)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.HouseExclusive)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.HouseExclusive)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.TopicCategory)
         </dt>
         <dd>
@@ -50,11 +44,10 @@
             @Html.DisplayNameFor(model => model.User)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.User.Id)
+            @Html.DisplayFor(model => model.User.UserName)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.TopicId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.TopicId">Edit</a>
 </div>
