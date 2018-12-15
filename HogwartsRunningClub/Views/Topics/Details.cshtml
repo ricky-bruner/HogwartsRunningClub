@@ -1,4 +1,4 @@
-﻿@model HogwartsRunningClub.Models.Topic
+﻿@model HogwartsRunningClub.Models.ViewModels.TopicViewModels.DetailsTopicViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -11,43 +11,47 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.Topic.Title)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => model.Topic.Title)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Content)
+            @Html.DisplayNameFor(model => model.Topic.Content)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Content)
+            @Html.DisplayFor(model => model.Topic.Content)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.DateCreated)
+            @Html.DisplayNameFor(model => model.Topic.DateCreated)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.DateCreated)
+            @Html.DisplayFor(model => model.Topic.DateCreated)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.TotalViews)
+            @Html.DisplayNameFor(model => model.Topic.TotalViews)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.TotalViews)
+            @Html.DisplayFor(model => model.Topic.TotalViews)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.TopicCategory)
+            @Html.DisplayNameFor(model => model.Topic.TopicCategory)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.TopicCategory.Label)
+            @Html.DisplayFor(model => model.Topic.TopicCategory.Label)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.User)
+            @Html.DisplayNameFor(model => model.Topic.User)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.User.UserName)
+            @Html.DisplayFor(model => model.Topic.User.UserName)
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.TopicId">Edit</a>
-</div>
+
+@if (Model.Edit) 
+ { 
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Topic.TopicId">Edit</a>
+    </div>
+ }
