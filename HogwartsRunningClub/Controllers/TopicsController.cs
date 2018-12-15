@@ -53,6 +53,11 @@ namespace HogwartsRunningClub.Controllers
                 return NotFound();
             }
 
+            if (topic.HouseExclusive == true && topic.User.HouseId != user.HouseId) 
+            {
+                return RedirectToAction("ViewGreatHall", "Home");
+            }
+
             DetailsTopicViewModel viewmodel = new DetailsTopicViewModel();
             viewmodel.Edit = true;
 
