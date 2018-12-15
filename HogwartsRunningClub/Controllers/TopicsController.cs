@@ -127,6 +127,13 @@ namespace HogwartsRunningClub.Controllers
             }
 
             Topic topic = await _context.Topic.FindAsync(id);
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            if (topic.UserId != user.Id) 
+            {
+                return RedirectToAction("Details", new { id = topic.TopicId });
+            }
+
             List<TopicCategory> topicCategories = await _context.TopicCategory.ToListAsync();
 
             if (topic == null)
