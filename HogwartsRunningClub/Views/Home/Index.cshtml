@@ -27,7 +27,7 @@
     <div class="cold-md-6">
         @foreach (Topic topic in Model.UserTopics) 
          { 
-            <p>@topic.Title - @Model.UserName</p>
+            <a asp-controller="Topics" asp-action="Details" asp-route-id="@topic.TopicId">@topic.Title - @Model.UserName</a>
          }
     </div>
 </div>
