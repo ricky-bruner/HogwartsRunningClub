@@ -110,7 +110,23 @@ namespace HogwartsRunningClub.Controllers
 
             return View("GreatHall", viewmodel);
         }
-        
+
+        public async Task<IActionResult> ViewCommonRoom() 
+        {
+
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            House house = await _context.House.SingleOrDefaultAsync(h => h.HouseId == user.HouseId);
+
+            CommonRoomViewModel viewmodel = new CommonRoomViewModel
+            {
+                House = house,
+                Topics = await _context.Topic.Include(t => t.User).Where(t => t.User.HouseId == house.HouseId).ToListAsync(),
+                HouseMembers = await _context.ApplicationUser.Where(u => u.HouseId == house.HouseId).ToListAsync()
+            };
+
+            return View("CommonRoom", viewmodel);
+        }
 
         public IActionResult Privacy()
         {

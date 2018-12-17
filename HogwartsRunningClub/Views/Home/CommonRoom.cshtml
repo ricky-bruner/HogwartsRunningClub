@@ -1,0 +1,28 @@
+﻿@model HogwartsRunningClub.Models.ViewModels.CommonRoomViewModel
+
+
+@{
+    ViewData["Title"] = "Common Room";
+}
+<h2>Welcome to the @Model.House.Title Common Room!</h2>
+<div class="col=md-12 row"> 
+
+    <div class="cold-md-3">
+        <h4>House Members</h4>
+        @foreach (ApplicationUser user in Model.HouseMembers) 
+         { 
+            <div>
+                <p>@user.UserName @user.MilesRun</p>
+            </div>
+         }
+    </div>
+    <div class="cold-md-6">
+        <h4>House Exclusive Topics</h4>
+        @foreach (Topic topic in Model.Topics) 
+         { 
+            <a asp-controller="Topics" asp-action="Details" asp-route-id="@topic.TopicId">@topic.Title - @topic.User.UserName</a>
+         }
+    </div>
+
+
+</div>
