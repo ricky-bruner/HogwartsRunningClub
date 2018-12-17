@@ -52,6 +52,9 @@
 @if (Model.Edit) 
  { 
     <div>
-        <a asp-action="Edit" asp-route-id="@Model.Topic.TopicId">Edit</a>
+        <a asp-action="Edit" asp-route-id="@Model.Topic.TopicId" class="btn btn-sm btn-warning">Edit</a>
+    </div>
+    <div>
+        <a asp-action="Delete" asp-route-id="@Model.Topic.TopicId" class="btn btn-sm btn-danger">Delete</a>
     </div>
  }

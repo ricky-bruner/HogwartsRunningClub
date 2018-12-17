@@ -221,15 +221,23 @@ namespace HogwartsRunningClub.Controllers
                 return NotFound();
             }
 
-            var topic = await _context.Topic
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            Topic topic = await _context.Topic
                 .Include(t => t.TopicCategory)
                 .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.TopicId == id);
+
             if (topic == null)
             {
                 return NotFound();
             }
 
+            if (topic.UserId != user.Id) 
+            {
+                return RedirectToAction("ViewGreatHall", "Home");
+            }
+            
             return View(topic);
         }
 
@@ -238,10 +246,28 @@ namespace HogwartsRunningClub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var topic = await _context.Topic.FindAsync(id);
+
+            ApplicationUser user = await GetCurrentUserAsync();
+            Topic topic = await _context.Topic.SingleOrDefaultAsync(t => t.TopicId == id);
+
+            if (topic.UserId != user.Id) 
+            {
+                return RedirectToAction("ViewGreatHall", "Home");
+            }
+
+            List<Comment> comments = await _context.Comment.Where(c => c.TopicId == topic.TopicId).ToListAsync();
+
+            if (comments.Count > 0) 
+            {
+                foreach (Comment comment in comments) 
+                {
+                    _context.Remove(comment);
+                }
+            }
+
             _context.Topic.Remove(topic);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("ViewGreatHall", "Home");
         }
 
         private bool TopicExists(int id)
