@@ -77,7 +77,7 @@ namespace HogwartsRunningClub.Controllers
         }
 
         // GET: Topics/Create
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(string id)
         {
             CreateTopicViewModel viewmodel = new CreateTopicViewModel();
 
@@ -91,6 +91,13 @@ namespace HogwartsRunningClub.Controllers
                             Value = c.TopicCategoryId.ToString()
                         };
             }).ToList();
+
+            if (id != null) 
+            {
+                Topic topic = new Topic();
+                topic.HouseExclusive = true;
+                viewmodel.Topic = topic;
+            }
 
             viewmodel.CategoryOptions = categoryOptions;
 

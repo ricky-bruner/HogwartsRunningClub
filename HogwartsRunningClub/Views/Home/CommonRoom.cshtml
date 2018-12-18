@@ -7,6 +7,10 @@
 <h2>Welcome to the @Model.House.Title Common Room!</h2>
 <div class="col=md-12 row"> 
 
+        
+        <a asp-controller="Topics" asp-action="Create" class="btn btn-sm btn-primary" asp-route-id="@Model.House.Title">Post a Topic</a>
+
+
     <div class="cold-md-3">
         <h4>House Members</h4>
         @foreach (ApplicationUser user in Model.HouseMembers) 
