@@ -13,5 +13,21 @@ namespace HogwartsRunningClub.Models.ViewModels
 
         public List<ApplicationUser> HouseMembers { get; set; }
 
+        public List<TopicCategory> TopicCategories { get; set; }
+
+        public List<string> BtnColors { get; set; } = new List<string>
+        {
+            "btn-primary",
+            "btn-success",
+            "btn-danger",
+            "btn-warning",
+            "btn-info",
+            "btn-primary",
+            "btn-success",
+            "btn-danger",
+            "btn-warning",
+            "btn-info"
+        };
+
     }
 }

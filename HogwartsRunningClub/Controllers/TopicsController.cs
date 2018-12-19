@@ -124,7 +124,15 @@ namespace HogwartsRunningClub.Controllers
 
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("ViewGreatHall", "Home");
+                if (viewmodel.Topic.HouseExclusive == true)
+                {
+                    return RedirectToAction("ViewCommonRoom", "Home");
+                }
+                else
+                { 
+                    return RedirectToAction("ViewGreatHall", "Home");
+                }
+
             }
 
             return View(viewmodel);
@@ -273,6 +281,7 @@ namespace HogwartsRunningClub.Controllers
             }
 
             _context.Topic.Remove(topic);
+
             await _context.SaveChangesAsync();
             return RedirectToAction("ViewGreatHall", "Home");
         }

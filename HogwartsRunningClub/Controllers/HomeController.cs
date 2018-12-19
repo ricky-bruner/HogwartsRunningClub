@@ -122,7 +122,12 @@ namespace HogwartsRunningClub.Controllers
             {
                 House = house,
                 Topics = await _context.Topic.Include(t => t.User).Where(t => t.User.HouseId == house.HouseId).ToListAsync(),
-                HouseMembers = await _context.ApplicationUser.Where(u => u.HouseId == house.HouseId).ToListAsync()
+                HouseMembers = await _context.ApplicationUser.Where(u => u.HouseId == house.HouseId).ToListAsync(),
+                TopicCategories = await _context.TopicCategory.ToListAsync()
+            };
+
+            ViewData["scripts"] = new List<string>() {
+                "CategoryFilter"
             };
 
             return View("CommonRoom", viewmodel);

@@ -15,9 +15,9 @@
         <div class="col-md-12">
             @foreach (Topic topic in Model.NonExclusiveTopics) 
              { 
-                <p>
+                <h5 class="col-md-8">
                     <a asp-controller="Topics" asp-action="Details" asp-route-id="@topic.TopicId">@topic.Title</a> <span>@topic.User.UserName</span>
-                </p>
+                </h5>
              }
         </div>
     </div>

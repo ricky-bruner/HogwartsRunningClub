@@ -53,6 +53,15 @@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
+        @if (ViewData.ContainsKey("scripts"))
+        {
+            foreach (var script in (List<string>)ViewData["scripts"])
+            {
+                <script src=@(String.Format("{0}{1}{2}", "/js/", script, ".js"))></script>
+            }
+
+        }
+
     </environment>
     <environment exclude="Development">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
