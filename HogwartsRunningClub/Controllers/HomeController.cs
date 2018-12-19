@@ -108,6 +108,10 @@ namespace HogwartsRunningClub.Controllers
                 TopicCategories = await _context.TopicCategory.ToListAsync()
             };
 
+            ViewData["scripts"] = new List<string>() {
+                "CategoryFilter"
+            };
+
             return View("GreatHall", viewmodel);
         }
 
