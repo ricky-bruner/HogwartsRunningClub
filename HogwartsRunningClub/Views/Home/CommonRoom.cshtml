@@ -8,8 +8,8 @@
 
 <a asp-controller="Topics" asp-action="Create" class="btn btn-sm btn-primary" asp-route-id="@Model.House.Title">Post a Topic</a>
 
-<div class="col=md-12 row"> 
-    <div class="cold-md-6">
+<div class="col-md-12 row"> 
+    <div class="cold-md-4">
         <h4>House Members</h4>
         @foreach (ApplicationUser user in Model.HouseMembers) 
          { 
@@ -18,22 +18,54 @@
             </div>
          }
     </div>
-    <div class="cold-md-6">
+    <div class="cold-md-8">
         <h4>House Exclusive Topics</h4>
         <div class="row">
-            <button class="btn btn-sm" id="all-topics-btn">All</button>
+            <a asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="All" class="btn btn-sm btn-primary">All</a>
             @for (var i = 0; i < @Model.TopicCategories.Count; i++ ) 
              {
-                <button class="btn btn-sm @Model.BtnColors[i]" id="@Model.TopicCategories[i].TopicCategoryId-@Model.TopicCategories[i].Label">@Model.TopicCategories[i].Label</button>
+                <a asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="@Model.TopicCategories[i].Label" class="btn btn-sm @Model.BtnColors[i]">@Model.TopicCategories[i].Label</a>
              }
         </div>
         <div id="topic-container">
-            @foreach (Topic topic in Model.Topics) 
-             { 
+            @foreach (Topic topic in Model.HouseTopics)
+            {
                 <h5 class="col-md-12 topic">
-                    <a asp-controller="Topics" asp-action="Details" asp-route-id="@topic.TopicId" id="topic-@topic.TopicId-@topic.TopicCategoryId">@topic.Title - @topic.User.UserName</a>
+                    <a asp-controller="Topics" asp-action="Details" asp-route-id="@topic.TopicId">@topic.Title - @topic.User.UserName</a>
                 </h5>
-             }
+            }
+
+            @if (Model.Pager.EndPage > 1)
+            {
+                <ul class="pagination">
+                    @if (Model.Pager.CurrentPage > 1)
+                    {
+                        <li>
+                            <a asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="@Model.Category">First</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="@Model.Category" asp-route-page="@(Model.Pager.CurrentPage - 1)">Previous</a>
+                        </li>
+                    }
+
+                    @for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+                    {
+                        <li class="@(page == Model.Pager.CurrentPage ? "active" : "")">
+                            <a asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="@Model.Category" asp-route-page="@(page)">@(page)</a>
+                        </li>
+                    }
+
+                    @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+                    {
+                        <li>
+                            <a asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="@Model.Category" asp-route-page="@(Model.Pager.CurrentPage + 1)">Next</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="@Model.Category" asp-route-page="@(Model.Pager.TotalPages)">Last</a>
+                        </li>
+                    }
+                </ul>
+            }
         </div>
     </div>
 
