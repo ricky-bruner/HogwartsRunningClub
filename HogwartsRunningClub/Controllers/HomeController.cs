@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using HogwartsRunningClub.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using HogwartsRunningClub.Models.ViewModels.PaginationModels;
 
 namespace HogwartsRunningClub.Controllers
 {
@@ -91,26 +92,98 @@ namespace HogwartsRunningClub.Controllers
         }
 
 
-        public async Task<IActionResult> ViewGreatHall() 
+        public async Task<IActionResult> ViewGreatHall(int? page, string category) 
         {
             ApplicationUser user = await GetCurrentUserAsync();
+            
+            List<House> houses = await _context.House.ToListAsync();
+
+            List<TopicCategory> categories = await _context.TopicCategory.ToListAsync();
+            
+            List<Topic> topics = new List<Topic>();
+            if (category == "All")
+            {
+                topics = await _context.Topic
+                        .Include(t => t.User)
+                        .ThenInclude(u => u.House)
+                        .OrderByDescending(t => t.DateCreated)
+                        .Where(t => t.HouseExclusive == false)
+                        .ToListAsync();
+            }
+            else 
+            {
+                TopicCategory tc = categories.Where(cat => cat.Label == category).SingleOrDefault();
+                topics = await _context.Topic
+                    .Include(t => t.User)
+                    .ThenInclude(u => u.House)
+                    .OrderByDescending(t => t.DateCreated)
+                    .Where(t => t.HouseExclusive == false && t.TopicCategoryId == tc.TopicCategoryId)
+                    .ToListAsync();
+            }
+
+
+
+            Pager pager = new Pager(topics.Count(), page);
 
             GreatHallViewModel viewmodel = new GreatHallViewModel
             {
                 User = user,
-                NonExclusiveTopics = await _context.Topic
-                    .Include(t => t.User)
-                    .ThenInclude(u => u.House)
-                    .OrderByDescending(t => t.DateCreated)
-                    .Where(t => t.HouseExclusive == false)
-                    .ToListAsync(),
-                Houses = await _context.House.ToListAsync(),
-                TopicCategories = await _context.TopicCategory.ToListAsync()
+                NonExclusiveTopics = topics.Skip((pager.CurrentPage - 1) * pager.PageSize).Take(pager.PageSize).ToList(),
+                Houses = houses,
+                TopicCategories = categories,
+                Pager = pager,
+                Category = category
             };
+
 
             return View("GreatHall", viewmodel);
         }
-        
+
+        public async Task<IActionResult> ViewCommonRoom(int? page, string category) 
+        {
+
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            House house = await _context.House.SingleOrDefaultAsync(h => h.HouseId == user.HouseId);
+
+            List<TopicCategory> categories = await _context.TopicCategory.ToListAsync();
+
+            List<Topic> topics = new List<Topic>();
+            if (category == "All")
+            {
+                topics = await _context.Topic
+                        .Include(t => t.User)
+                        .ThenInclude(u => u.House)
+                        .OrderByDescending(t => t.DateCreated)
+                        .Where(t => t.HouseExclusive == true && t.User.HouseId == house.HouseId)
+                        .ToListAsync();
+            }
+            else
+            {
+                TopicCategory tc = categories.Where(cat => cat.Label == category).SingleOrDefault();
+                topics = await _context.Topic
+                    .Include(t => t.User)
+                    .ThenInclude(u => u.House)
+                    .OrderByDescending(t => t.DateCreated)
+                    .Where(t => t.HouseExclusive == true && t.TopicCategoryId == tc.TopicCategoryId && t.User.HouseId == house.HouseId)
+                    .ToListAsync();
+            }
+
+            Pager pager = new Pager(topics.Count(), page);
+
+            CommonRoomViewModel viewmodel = new CommonRoomViewModel
+            {
+                House = house,
+                HouseTopics = topics.Skip((pager.CurrentPage - 1) * pager.PageSize).Take(pager.PageSize).ToList(),
+                HouseMembers = await _context.ApplicationUser.Where(u => u.HouseId == house.HouseId).ToListAsync(),
+                TopicCategories = categories,
+                Pager = pager,
+                Category = category,
+            };
+
+
+            return View("CommonRoom", viewmodel);
+        }
 
         public IActionResult Privacy()
         {

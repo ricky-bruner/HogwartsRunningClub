@@ -77,7 +77,7 @@ namespace HogwartsRunningClub.Controllers
         }
 
         // GET: Topics/Create
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(string id)
         {
             CreateTopicViewModel viewmodel = new CreateTopicViewModel();
 
@@ -91,6 +91,13 @@ namespace HogwartsRunningClub.Controllers
                             Value = c.TopicCategoryId.ToString()
                         };
             }).ToList();
+
+            if (id != null) 
+            {
+                Topic topic = new Topic();
+                topic.HouseExclusive = true;
+                viewmodel.Topic = topic;
+            }
 
             viewmodel.CategoryOptions = categoryOptions;
 
@@ -117,7 +124,15 @@ namespace HogwartsRunningClub.Controllers
 
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("ViewGreatHall", "Home");
+                if (viewmodel.Topic.HouseExclusive == true)
+                {
+                    return RedirectToAction("ViewCommonRoom", "Home");
+                }
+                else
+                { 
+                    return RedirectToAction("ViewGreatHall", "Home");
+                }
+
             }
 
             return View(viewmodel);
@@ -266,6 +281,7 @@ namespace HogwartsRunningClub.Controllers
             }
 
             _context.Topic.Remove(topic);
+
             await _context.SaveChangesAsync();
             return RedirectToAction("ViewGreatHall", "Home");
         }
