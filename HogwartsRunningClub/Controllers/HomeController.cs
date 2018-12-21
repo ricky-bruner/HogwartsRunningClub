@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using HogwartsRunningClub.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using HogwartsRunningClub.Models.ViewModels.PaginationModels;
 
 namespace HogwartsRunningClub.Controllers
 {
@@ -91,26 +92,49 @@ namespace HogwartsRunningClub.Controllers
         }
 
 
-        public async Task<IActionResult> ViewGreatHall() 
+        public async Task<IActionResult> ViewGreatHall(int? page, string category) 
         {
             ApplicationUser user = await GetCurrentUserAsync();
+            
+            List<House> houses = await _context.House.ToListAsync();
+
+            List<TopicCategory> categories = await _context.TopicCategory.ToListAsync();
+            
+            List<Topic> topics = new List<Topic>();
+            if (category == "All")
+            {
+                topics = await _context.Topic
+                        .Include(t => t.User)
+                        .ThenInclude(u => u.House)
+                        .OrderByDescending(t => t.DateCreated)
+                        .Where(t => t.HouseExclusive == false)
+                        .ToListAsync();
+            }
+            else 
+            {
+                TopicCategory tc = categories.Where(cat => cat.Label == category).SingleOrDefault();
+                topics = await _context.Topic
+                    .Include(t => t.User)
+                    .ThenInclude(u => u.House)
+                    .OrderByDescending(t => t.DateCreated)
+                    .Where(t => t.HouseExclusive == false && t.TopicCategoryId == tc.TopicCategoryId)
+                    .ToListAsync();
+            }
+
+
+
+            Pager pager = new Pager(topics.Count(), page);
 
             GreatHallViewModel viewmodel = new GreatHallViewModel
             {
                 User = user,
-                NonExclusiveTopics = await _context.Topic
-                    .Include(t => t.User)
-                    .ThenInclude(u => u.House)
-                    .OrderByDescending(t => t.DateCreated)
-                    .Where(t => t.HouseExclusive == false)
-                    .ToListAsync(),
-                Houses = await _context.House.ToListAsync(),
-                TopicCategories = await _context.TopicCategory.ToListAsync()
+                NonExclusiveTopics = topics.Skip((pager.CurrentPage - 1) * pager.PageSize).Take(pager.PageSize).ToList(),
+                Houses = houses,
+                TopicCategories = categories,
+                Pager = pager,
+                Category = category
             };
 
-            ViewData["scripts"] = new List<string>() {
-                "CategoryFilter"
-            };
 
             return View("GreatHall", viewmodel);
         }
