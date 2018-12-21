@@ -5,29 +5,13 @@ using System.Threading.Tasks;
 
 namespace HogwartsRunningClub.Models.ViewModels
 {
-    public class CommonRoomViewModel
+    public class CommonRoomViewModel : GreatHallViewModel
     {
         public House House { get; set; }
 
-        public List<Topic> Topics { get; set; }
+        public List<Topic> HouseTopics { get; set; }
 
         public List<ApplicationUser> HouseMembers { get; set; }
-
-        public List<TopicCategory> TopicCategories { get; set; }
-
-        public List<string> BtnColors { get; set; } = new List<string>
-        {
-            "btn-primary",
-            "btn-success",
-            "btn-danger",
-            "btn-warning",
-            "btn-info",
-            "btn-primary",
-            "btn-success",
-            "btn-danger",
-            "btn-warning",
-            "btn-info"
-        };
 
     }
 }
