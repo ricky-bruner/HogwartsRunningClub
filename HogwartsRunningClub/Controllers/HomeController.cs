@@ -139,24 +139,48 @@ namespace HogwartsRunningClub.Controllers
             return View("GreatHall", viewmodel);
         }
 
-        public async Task<IActionResult> ViewCommonRoom() 
+        public async Task<IActionResult> ViewCommonRoom(int? page, string category) 
         {
 
             ApplicationUser user = await GetCurrentUserAsync();
 
             House house = await _context.House.SingleOrDefaultAsync(h => h.HouseId == user.HouseId);
 
+            List<TopicCategory> categories = await _context.TopicCategory.ToListAsync();
+
+            List<Topic> topics = new List<Topic>();
+            if (category == "All")
+            {
+                topics = await _context.Topic
+                        .Include(t => t.User)
+                        .ThenInclude(u => u.House)
+                        .OrderByDescending(t => t.DateCreated)
+                        .Where(t => t.HouseExclusive == true && t.User.HouseId == house.HouseId)
+                        .ToListAsync();
+            }
+            else
+            {
+                TopicCategory tc = categories.Where(cat => cat.Label == category).SingleOrDefault();
+                topics = await _context.Topic
+                    .Include(t => t.User)
+                    .ThenInclude(u => u.House)
+                    .OrderByDescending(t => t.DateCreated)
+                    .Where(t => t.HouseExclusive == true && t.TopicCategoryId == tc.TopicCategoryId && t.User.HouseId == house.HouseId)
+                    .ToListAsync();
+            }
+
+            Pager pager = new Pager(topics.Count(), page);
+
             CommonRoomViewModel viewmodel = new CommonRoomViewModel
             {
                 House = house,
-                Topics = await _context.Topic.Include(t => t.User).Where(t => t.User.HouseId == house.HouseId).ToListAsync(),
+                HouseTopics = topics.Skip((pager.CurrentPage - 1) * pager.PageSize).Take(pager.PageSize).ToList(),
                 HouseMembers = await _context.ApplicationUser.Where(u => u.HouseId == house.HouseId).ToListAsync(),
-                TopicCategories = await _context.TopicCategory.ToListAsync()
+                TopicCategories = categories,
+                Pager = pager,
+                Category = category,
             };
 
-            ViewData["scripts"] = new List<string>() {
-                "CategoryFilter"
-            };
 
             return View("CommonRoom", viewmodel);
         }
