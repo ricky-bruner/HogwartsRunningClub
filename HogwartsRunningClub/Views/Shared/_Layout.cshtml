@@ -42,10 +42,15 @@
     <partial name="_CookieConsentPartial" />
 
     <div class="container body-content">
-        @RenderBody()
+        <div class="page-body">
+            @RenderBody()
+        </div>
+    </div>
+   
+    <div class="page-footer">
         <hr />
         <footer>
-            <p>&copy; 2018 - HogwartsRunningClub</p>
+            <p class="text-center">&copy; 2018 - HogwartsRunningClub</p>
         </footer>
     </div>
 
@@ -59,9 +64,7 @@
             {
                 <script src=@(String.Format("{0}{1}{2}", "/js/", script, ".js"))></script>
             }
-
         }
-
     </environment>
     <environment exclude="Development">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"

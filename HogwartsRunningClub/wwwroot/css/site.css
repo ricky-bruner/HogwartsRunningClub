@@ -12,16 +12,6 @@ body {
     padding-right: 15px;
 }
 
-/* Carousel */
-.carousel-caption p {
-    font-size: 20px;
-    line-height: 1.4;
-}
-
-/* Make .svg files in the carousel display properly in older browsers */
-.carousel-inner .item img[src$=".svg"] {
-    width: 100%;
-}
 
 /* QR code generator */
 #qrCode {
@@ -81,6 +71,20 @@ body {
     background: linear-gradient(to bottom, #000000, #0f9b0f);
 }
 
+
+.page-body {
+    display: block;
+    width: 100%;
+}
+
+
+.page-footer {
+    display: block;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    margin: 1em auto 0;
+}
 
 
 
