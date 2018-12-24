@@ -36,7 +36,10 @@ namespace HogwartsRunningClub.Controllers
 
             ApplicationUser user = await GetCurrentUserAsync();
 
-            user.UserTopics = _context.Topic.Where(t => t.UserId == user.Id).ToList();
+            user.UserTopics = _context.Topic
+                .Include(t => t.Comments)
+                .Where(t => t.UserId == user.Id)
+                .ToList();
 
             if (user.HouseId != null) 
             { 
@@ -101,9 +104,12 @@ namespace HogwartsRunningClub.Controllers
             List<TopicCategory> categories = await _context.TopicCategory.ToListAsync();
             
             List<Topic> topics = new List<Topic>();
+
             if (category == "All")
             {
                 topics = await _context.Topic
+                        .Include(t => t.Comments)
+                        .ThenInclude(c => c.User)
                         .Include(t => t.User)
                         .ThenInclude(u => u.House)
                         .OrderByDescending(t => t.DateCreated)
@@ -114,6 +120,8 @@ namespace HogwartsRunningClub.Controllers
             {
                 TopicCategory tc = categories.Where(cat => cat.Label == category).SingleOrDefault();
                 topics = await _context.Topic
+                    .Include(t => t.Comments)
+                    .ThenInclude(c => c.User)
                     .Include(t => t.User)
                     .ThenInclude(u => u.House)
                     .OrderByDescending(t => t.DateCreated)
@@ -128,7 +136,10 @@ namespace HogwartsRunningClub.Controllers
             GreatHallViewModel viewmodel = new GreatHallViewModel
             {
                 User = user,
-                NonExclusiveTopics = topics.Skip((pager.CurrentPage - 1) * pager.PageSize).Take(pager.PageSize).ToList(),
+                NonExclusiveTopics = topics
+                    .Skip((pager.CurrentPage - 1) * pager.PageSize)
+                    .Take(pager.PageSize)
+                    .ToList(),
                 Houses = houses,
                 TopicCategories = categories,
                 Pager = pager,
@@ -149,9 +160,12 @@ namespace HogwartsRunningClub.Controllers
             List<TopicCategory> categories = await _context.TopicCategory.ToListAsync();
 
             List<Topic> topics = new List<Topic>();
+
             if (category == "All")
             {
                 topics = await _context.Topic
+                        .Include(t => t.Comments)
+                        .ThenInclude(c => c.User)
                         .Include(t => t.User)
                         .ThenInclude(u => u.House)
                         .OrderByDescending(t => t.DateCreated)
@@ -160,8 +174,13 @@ namespace HogwartsRunningClub.Controllers
             }
             else
             {
-                TopicCategory tc = categories.Where(cat => cat.Label == category).SingleOrDefault();
+                TopicCategory tc = categories
+                    .Where(cat => cat.Label == category)
+                    .SingleOrDefault();
+
                 topics = await _context.Topic
+                    .Include(t => t.Comments)
+                    .ThenInclude(c => c.User)
                     .Include(t => t.User)
                     .ThenInclude(u => u.House)
                     .OrderByDescending(t => t.DateCreated)
@@ -174,8 +193,13 @@ namespace HogwartsRunningClub.Controllers
             CommonRoomViewModel viewmodel = new CommonRoomViewModel
             {
                 House = house,
-                HouseTopics = topics.Skip((pager.CurrentPage - 1) * pager.PageSize).Take(pager.PageSize).ToList(),
-                HouseMembers = await _context.ApplicationUser.Where(u => u.HouseId == house.HouseId).ToListAsync(),
+                HouseTopics = topics
+                    .Skip((pager.CurrentPage - 1) * pager.PageSize)
+                    .Take(pager.PageSize)
+                    .ToList(),
+                HouseMembers = await _context.ApplicationUser
+                    .Where(u => u.HouseId == house.HouseId)
+                    .ToListAsync(),
                 TopicCategories = categories,
                 Pager = pager,
                 Category = category,

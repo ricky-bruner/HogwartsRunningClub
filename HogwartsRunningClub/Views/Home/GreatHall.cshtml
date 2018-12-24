@@ -25,7 +25,7 @@
             @foreach (Topic topic in Model.NonExclusiveTopics)
             {
                 <h5 class="col-md-12 topic">
-                    <a asp-controller="Topics" asp-action="Details" asp-route-id="@topic.TopicId">@topic.Title - @topic.User.UserName</a>
+                    <a asp-controller="Topics" asp-action="Details" asp-route-id="@topic.TopicId">@topic.Title - @topic.User.UserName - (@topic.Comments.Count) Comments</a>
                 </h5>
             }
 

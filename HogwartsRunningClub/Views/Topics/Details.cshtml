@@ -9,7 +9,31 @@
 <div>
     <h4>Topic</h4>
     <hr />
-    <dl class="dl-horizontal">
+    <div class="topic-card">
+        <div>
+            @if (Model.Edit)
+            {
+                <div>
+                    <a asp-action="Edit" asp-route-id="@Model.Topic.TopicId" class="btn btn-sm btn-warning">Edit</a>
+                </div>
+                <div>
+                    <a asp-action="Delete" asp-route-id="@Model.Topic.TopicId" class="btn btn-sm btn-danger">Delete</a>
+                </div>
+            }
+        </div>
+        <span>Total Views: @Model.Topic.TotalViews</span>
+        <h3>@Model.Topic.Title</h3>
+        <span>Posted On: @Model.Topic.DateCreated</span>
+        <hr />
+        <div>
+            <p>@Model.Topic.Content</p>
+        </div>
+        <hr />
+        <div>
+            <button>Add Comment</button>
+        </div>
+    </div>
+    @*<dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Topic.Title)
         </dt>
@@ -46,15 +70,7 @@
         <dd>
             @Html.DisplayFor(model => model.Topic.User.UserName)
         </dd>
-    </dl>
+    </dl>*@
 </div>
 
-@if (Model.Edit) 
- { 
-    <div>
-        <a asp-action="Edit" asp-route-id="@Model.Topic.TopicId" class="btn btn-sm btn-warning">Edit</a>
-    </div>
-    <div>
-        <a asp-action="Delete" asp-route-id="@Model.Topic.TopicId" class="btn btn-sm btn-danger">Delete</a>
-    </div>
- }
+
