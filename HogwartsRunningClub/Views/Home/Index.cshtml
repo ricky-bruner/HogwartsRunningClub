@@ -5,30 +5,32 @@
 }
 
 <h2>Welcome to the Hogwarts Running Club, @Model.UserName!</h2>
-@if (Model.HouseId == null) 
- { 
-    <a asp-action="SortingHat" class="btn btn-info">Sort</a>
- }
-@if (Model.HouseId != null) 
- { 
+@if (Model.HouseId == null)
+{
+    <a asp-action="SortingHat" class="btn-floating btn-large waves-effect waves-light">
+        <i class="material-icons right">flash_on</i>
+    </a>
+}
+@if (Model.HouseId != null)
+{
     <p>House: @Model.House.Title</p>
- }
+}
 <hr />
 <div class="row">
     <div class="col-md-6">
         <p>Race Collection: </p>
-        @foreach (UserRace medal in Model.UserRaces) 
-         { 
+        @foreach (UserRace medal in Model.UserRaces)
+        {
             <p>@medal.Race.Title</p>
-         }
+        }
 
     </div>
 
     <div class="cold-md-6">
-        @foreach (Topic topic in Model.UserTopics) 
-         { 
+        @foreach (Topic topic in Model.UserTopics)
+        {
             <a asp-controller="Topics" asp-action="Details" asp-route-id="@topic.TopicId">@topic.Title - @Model.UserName</a>
-         }
+        }
     </div>
 </div>
 

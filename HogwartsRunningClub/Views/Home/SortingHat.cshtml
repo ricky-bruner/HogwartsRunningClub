@@ -11,18 +11,36 @@
     <h3>The Sorting Hat gives input into which House a witch or wizard belongs, but ultimately, we all have a choice in who we are and where we belong. Which that knowledge, we welcom you to choose where your allegiances lie, @Model.User.UserName!</h3>
     <hr />
     <div class="sorting-house-container">
-        @foreach (House house in Model.Houses) 
-         { 
-            <div class="col-md-5 house-card card-@house.Title">
+        @foreach (House house in Model.Houses)
+        {
+
+            <div class="card">
+                <div class="card-content">
+                    <p>@house.Title</p>
+                </div>
+                <div class="card-tabs">
+                    <ul class="tabs tabs-fixed-width">
+                        <li class="tab"><a href="#test4">Test 1</a></li>
+                        <li class="tab"><a class="active" href="#test5">Test 2</a></li>
+                        <li class="tab"><a href="#test6">Test 3</a></li>
+                    </ul>
+                </div>
+                <div class="card-content grey lighten-4">
+                    <div id="test4">Test 1</div>
+                    <div id="test5">Test 2</div>
+                    <div id="test6">Test 3</div>
+                </div>
+            </div>
+            @*<div class="col-md-5 house-card card-@house.Title">
                 <form asp-action="SortingHat">
-                    <input type="hidden" asp-for="@Model.SelectedHouseId" value="@house.HouseId"/>
+                    <input type="hidden" asp-for="@Model.SelectedHouseId" value="@house.HouseId" />
                     <h3>@house.Title</h3>
                     <p>@house.Description</p>
                     <p>Total Miles Ran for this House: @house.TotalMiles</p>
                     <button class="btn">Choose @house.Title</button>
                 </form>
-            </div>
-         }
+            </div>*@
+        }
     </div>
     <hr />
     <hr />
