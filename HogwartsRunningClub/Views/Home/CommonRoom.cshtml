@@ -40,34 +40,37 @@
 
                 @if (Model.Pager.EndPage > 1)
                 {
-                    <ul class="pagination">
-                        @if (Model.Pager.CurrentPage > 1)
-                        {
-                            <li>
-                                <a asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="@Model.Category">First</a>
-                            </li>
-                            <li>
-                                <a asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="@Model.Category" asp-route-page="@(Model.Pager.CurrentPage - 1)">Previous</a>
-                            </li>
-                        }
+                    <nav aria-label="Page navigation example">
 
-                        @for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
-                        {
-                            <li class="@(page == Model.Pager.CurrentPage ? "active" : "")">
-                                <a asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="@Model.Category" asp-route-page="@(page)">@(page)</a>
-                            </li>
-                        }
+                        <ul class="pagination">
+                            @if (Model.Pager.CurrentPage > 1)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="@Model.Category">First</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="@Model.Category" asp-route-page="@(Model.Pager.CurrentPage - 1)">Previous</a>
+                                </li>
+                            }
 
-                        @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
-                        {
-                            <li>
-                                <a asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="@Model.Category" asp-route-page="@(Model.Pager.CurrentPage + 1)">Next</a>
-                            </li>
-                            <li>
-                                <a asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="@Model.Category" asp-route-page="@(Model.Pager.TotalPages)">Last</a>
-                            </li>
-                        }
-                    </ul>
+                            @for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+                            {
+                                <li class="page-item @(page == Model.Pager.CurrentPage ? "active" : "")">
+                                    <a class="page-link" asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="@Model.Category" asp-route-page="@(page)">@(page)</a>
+                                </li>
+                            }
+
+                            @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="@Model.Category" asp-route-page="@(Model.Pager.CurrentPage + 1)">Next</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="@Model.Category" asp-route-page="@(Model.Pager.TotalPages)">Last</a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
                 }
             </div>
         </div>

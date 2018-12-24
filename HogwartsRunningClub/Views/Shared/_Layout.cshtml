@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -6,36 +11,86 @@
     <title>@ViewData["Title"] - Hogwarts Running Club</title>
 
     <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />*@
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment exclude="Development">
-        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        @*<link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
+            asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+            asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />*@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Hogwarts Running Club</a>
+    @*<nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Hogwarts Running Club</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Profile</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="All">Great Hall</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="All">Common Room</a></li>
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Profile</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="All">Great Hall</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="All">Common Room</a></li>
-                </ul>
-                <partial name="_LoginPartial" />
-            </div>
+        </nav>*@
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Hogwarts Running Club</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="All">Great Hall</a>
+                    </li>
+                    @if (UserManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).HouseId == 1)
+                    {
+                        <li class="nav-item bg-danger rounded">
+                            <a class="nav-link text-warning" asp-area="" asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="All">Common Room</a>
+                        </li>
+
+                    }
+                    else if (UserManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).HouseId == 2)
+                    {
+                        <li class="nav-item bg-warning rounded">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="All">Common Room</a>
+                        </li>
+                    }
+                    else if (UserManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).HouseId == 3)
+                    {
+                        <li class="nav-item bg-primary rounded">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="All">Common Room</a>
+                        </li>
+                    }
+                    else if (UserManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).HouseId == 4)
+                    {
+                        <li class="nav-item bg-success rounded">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="All">Common Room</a>
+                        </li>
+                    }
+                }
+            </ul>
+            <partial name="_LoginPartial" />
+
         </div>
     </nav>
 
@@ -46,7 +101,7 @@
             @RenderBody()
         </div>
     </div>
-   
+
     <div class="page-footer">
         <hr />
         <footer>
@@ -55,8 +110,11 @@
     </div>
 
     <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        @*<script src="~/lib/jquery/dist/jquery.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>*@
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
         @if (ViewData.ContainsKey("scripts"))
         {
@@ -67,18 +125,18 @@
         }
     </environment>
     <environment exclude="Development">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
-        </script>
+        @*<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+                    asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                    asp-fallback-test="window.jQuery"
+                    crossorigin="anonymous"
+                    integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+            </script>
+            <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                    asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                    asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                    crossorigin="anonymous"
+                    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+            </script>*@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 

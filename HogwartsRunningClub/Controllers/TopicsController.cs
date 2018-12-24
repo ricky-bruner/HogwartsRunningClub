@@ -73,6 +73,10 @@ namespace HogwartsRunningClub.Controllers
             _context.Update(topic);
             await _context.SaveChangesAsync();
 
+            ViewData["scripts"] = new List<string>() {
+                "HandleComments"
+            };
+
             return View(viewmodel);
         }
 
