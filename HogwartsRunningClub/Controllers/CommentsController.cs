@@ -10,6 +10,7 @@ using HogwartsRunningClub.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using HogwartsRunningClub.Models.ViewModels.TopicViewModels;
+using HogwartsRunningClub.Models.ViewModels.CommentModels;
 
 namespace HogwartsRunningClub.Controllers
 {
@@ -27,28 +28,21 @@ namespace HogwartsRunningClub.Controllers
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-        public async Task<IActionResult> GetComments(int id)
+        public async Task<IActionResult> GetComment(int id)
         {
-            List<Comment> comments = await _context.Comment
-                .Include(c => c.User)
-                .ToListAsync();
+            ApplicationUser user = await GetCurrentUserAsync();
 
-            List<Comment> returnableComments = new List<Comment>();
+            Comment comment = await _context.Comment.FindAsync(id);
 
-            foreach (Comment c in comments)
+            if (comment.UserId != user.Id) 
             {
-                Comment newC = new Comment();
-                newC.CommentId = c.CommentId;
-                newC.Content = c.Content;
-                newC.DateCreated = c.DateCreated;
-                newC.TopicId = c.TopicId;
-                newC.UserId = c.User.UserName;
-
-                returnableComments.Add(newC);
+                return RedirectToAction("ViewGreatHall", "Home");
             }
 
+            CommentJson json = new CommentJson();
+            json.Content = comment.Content;
 
-            return Json(returnableComments);
+            return Json(json);
         }
 
         [HttpPost]
@@ -142,42 +136,21 @@ namespace HogwartsRunningClub.Controllers
         //    return View(comment);
         //}
 
-        //// POST: Comments/Edit/5
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
+        // POST: Comments/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
         //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("CommentId,Content,DateCreated,UserId,TopicId")] Comment comment)
-        //{
-        //    if (id != comment.CommentId)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> EditComment(int CommentId, Comment Comment)
+        {
+            Comment comment = await _context.Comment.FindAsync(CommentId);
+            comment.Content = Comment.Content;
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(comment);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!CommentExists(comment.CommentId))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["TopicId"] = new SelectList(_context.Topic, "TopicId", "Content", comment.TopicId);
-        //    ViewData["UserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", comment.UserId);
-        //    return View(comment);
-        //}
+            _context.Update(comment);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", "Topics", new { id = comment.TopicId });
+        }
 
         //// GET: Comments/Delete/5
         //public async Task<IActionResult> Delete(int? id)
@@ -199,16 +172,17 @@ namespace HogwartsRunningClub.Controllers
         //    return View(comment);
         //}
 
-        //// POST: Comments/Delete/5
-        //[HttpPost, ActionName("Delete")]
+        // POST: Comments/Delete/5
+        [HttpPost]
         //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var comment = await _context.Comment.FindAsync(id);
-        //    _context.Comment.Remove(comment);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
+        public async Task<IActionResult> DeleteComment(int id)
+        {
+            var comment = await _context.Comment.FindAsync(id);
+            int topicId = comment.TopicId;
+            _context.Comment.Remove(comment);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Details", "Topics", new { id = topicId });
+        }
 
         private bool CommentExists(int id)
         {

@@ -4,22 +4,20 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>@Model.Topic.User.UserName</h2>
+<div class="d-flex justify-content-between">
+    <h2>@Model.Topic.User.UserName</h2>
+    @if (Model.Edit)
+    {
+        <div class="justify-content-end">
+                <a asp-action="Edit" asp-route-id="@Model.Topic.TopicId" class="btn btn-sm btn-warning mt-2 mr-2">Edit</a>
+                <a asp-action="Delete" asp-route-id="@Model.Topic.TopicId" class="btn btn-sm btn-danger mt-2 mr-2">Delete</a>
+        </div>
+    }
+</div>
 
 <div>
     <hr />
     <div class="topic-card" id="topic-@Model.Topic.TopicId">
-        @if (Model.Edit)
-        {
-            <div class="d-flex justify-content-right">
-                <div>
-                    <a asp-action="Edit" asp-route-id="@Model.Topic.TopicId" class="btn btn-sm btn-warning">Edit</a>
-                </div>
-                <div>
-                    <a asp-action="Delete" asp-route-id="@Model.Topic.TopicId" class="btn btn-sm btn-danger">Delete</a>
-                </div>
-            </div>
-        }
         <span>Total Views: @Model.Topic.TotalViews</span>
         <h3>@Model.Topic.Title</h3>
         <span>Posted On: @Model.Topic.DateCreated</span>
@@ -30,7 +28,7 @@
         <hr />
         <div id="comment-form">
             <div class="form-group row justify-content-md-center">
-                <button class="btn btn-md btn-primary" id="add-comment-btn">Add Comment</button>
+                <button class="btn btn-sm btn-primary" id="add-comment-btn">Comment</button>
             </div>
         </div>
         <div id="comments-container">
@@ -50,14 +48,43 @@
                                 { 
                                     <h5 class="mt-0 mb-1 text-primary">@comment.User.UserName</h5>
                                 }
-                                <p class="lead">@comment.Content</p>
+                                <div class="lead" id="comment-content-@comment.CommentId">@comment.Content</div>
                                 <p class="mb-0 text-right"><small>@comment.DateCreated</small></p>
                                 @if (comment.User.UserName == Model.User.UserName)
                                 {
-                                    <div class="form-group d-flex justify-content-end">
-                                        <a class="p-2" href="/comments/edit">Edit</a>
-                                        <a class="p-2" href="/comments/delete">Delete</a>
+                                <div class="form-group d-flex justify-content-end">
+                                    <button class="btn btn-link" id="edit-comment-btn-@comment.CommentId">Edit</button>
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#deleteModal">
+                                        Delete
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteModalLongTitle">Remove Comment?</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to permanently delete this comment?
+                                                    <br />
+                                                    <br />
+                                                    <span class="lead">"@comment.Content"</span>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                    <form asp-controller="Comments" asp-action="DeleteComment" asp-route-id="@comment.CommentId" method="post">
+                                                        <button class="btn btn-danger">Delete</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
+                                </div>
                                 }
                                 <hr />
                             </div>
