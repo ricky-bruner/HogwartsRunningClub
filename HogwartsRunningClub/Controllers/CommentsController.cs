@@ -39,10 +39,10 @@ namespace HogwartsRunningClub.Controllers
                 return RedirectToAction("ViewGreatHall", "Home");
             }
 
-            CommentJson json = new CommentJson();
-            json.Content = comment.Content;
+            CommentJson commentJson = new CommentJson();
+            commentJson.Content = comment.Content;
 
-            return Json(json);
+            return Json(commentJson);
         }
 
         [HttpPost]
