@@ -9,7 +9,11 @@ namespace HogwartsRunningClub.Models.ViewModels.TopicViewModels
     {
         public Topic Topic { get; set; }
 
+        public ApplicationUser User { get; set; }
+
         public bool Edit { get; set; }
+
+        public string Content { get; set; }
 
     }
 }

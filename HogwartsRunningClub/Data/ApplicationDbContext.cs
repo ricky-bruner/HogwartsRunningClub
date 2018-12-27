@@ -40,14 +40,11 @@ namespace HogwartsRunningClub.Data
                 .Property(b => b.DateCreated)
                 .HasDefaultValueSql("GETDATE()");
 
-            // Restrict deletion of related order when OrderProducts entry is removed
             modelBuilder.Entity<Topic>()
                 .HasMany(t => t.Comments)
                 .WithOne(c => c.Topic)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
-            // Restrict deletion of related product when OrderProducts entry is removed
             modelBuilder.Entity<TopicCategory>()
                 .HasMany(tc => tc.Topics)
                 .WithOne(t => t.TopicCategory)

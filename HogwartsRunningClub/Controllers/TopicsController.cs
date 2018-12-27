@@ -44,7 +44,11 @@ namespace HogwartsRunningClub.Controllers
             Topic topic = await _context.Topic
                 .Include(t => t.TopicCategory)
                 .Include(t => t.User)
+                .Include(t => t.Comments)
+                .ThenInclude(c => c.User)
                 .FirstOrDefaultAsync(m => m.TopicId == id);
+
+            topic.Comments = topic.Comments.OrderByDescending(c => c.DateCreated).ToList();
 
             ApplicationUser user = await GetCurrentUserAsync();
 
@@ -69,6 +73,7 @@ namespace HogwartsRunningClub.Controllers
             }
 
             viewmodel.Topic = topic;
+            viewmodel.User = user;
             
             _context.Update(topic);
             await _context.SaveChangesAsync();

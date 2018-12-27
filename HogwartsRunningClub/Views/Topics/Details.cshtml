@@ -4,23 +4,22 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<h2>@Model.Topic.User.UserName</h2>
 
 <div>
-    <h4>Topic</h4>
     <hr />
-    <div class="topic-card">
-        <div>
-            @if (Model.Edit)
-            {
+    <div class="topic-card" id="topic-@Model.Topic.TopicId">
+        @if (Model.Edit)
+        {
+            <div class="d-flex justify-content-right">
                 <div>
                     <a asp-action="Edit" asp-route-id="@Model.Topic.TopicId" class="btn btn-sm btn-warning">Edit</a>
                 </div>
                 <div>
                     <a asp-action="Delete" asp-route-id="@Model.Topic.TopicId" class="btn btn-sm btn-danger">Delete</a>
                 </div>
-            }
-        </div>
+            </div>
+        }
         <span>Total Views: @Model.Topic.TotalViews</span>
         <h3>@Model.Topic.Title</h3>
         <span>Posted On: @Model.Topic.DateCreated</span>
@@ -29,54 +28,45 @@
             <p>@Model.Topic.Content</p>
         </div>
         <hr />
-        <div>
-            <button id="add-comment-btn">Add Comment</button>
+        <div id="comment-form">
+            <div class="form-group row justify-content-md-center">
+                <button class="btn btn-md btn-primary" id="add-comment-btn">Add Comment</button>
+            </div>
         </div>
-        <div id="comment-form"></div>
-        <button class="btn-block" id="show-comments">
-            Show Comments
-        </button>
-        <div id="comments-container"></div>
+        <div id="comments-container">
+            @if (Model.Topic.Comments.Count > 0)
+            {
+                <ul class="list-unstyled p-2">
+                    @foreach (Comment comment in Model.Topic.Comments)
+                    {
+                        <li class="media">
+                            <img class="mr-3" src="..." alt="User Image">
+                            <div class="media-body">
+                                @if (Model.Topic.User.UserName == comment.User.UserName)
+                                {
+                                    <h5 class="mt-0 mb-1 text-primary">@comment.User.UserName <span class="text-info"><small>*Topic Creater*</small></span></h5>
 
+                                } else 
+                                { 
+                                    <h5 class="mt-0 mb-1 text-primary">@comment.User.UserName</h5>
+                                }
+                                <p class="lead">@comment.Content</p>
+                                <p class="mb-0 text-right"><small>@comment.DateCreated</small></p>
+                                @if (comment.User.UserName == Model.User.UserName)
+                                {
+                                    <div class="form-group d-flex justify-content-end">
+                                        <a class="p-2" href="/comments/edit">Edit</a>
+                                        <a class="p-2" href="/comments/delete">Delete</a>
+                                    </div>
+                                }
+                                <hr />
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
     </div>
-    @*<dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Topic.Title)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Topic.Title)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Topic.Content)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Topic.Content)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Topic.DateCreated)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Topic.DateCreated)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Topic.TotalViews)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Topic.TotalViews)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Topic.TopicCategory)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Topic.TopicCategory.Label)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Topic.User)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Topic.User.UserName)
-        </dd>
-    </dl>*@
 </div>
 
 

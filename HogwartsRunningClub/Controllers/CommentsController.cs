@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using HogwartsRunningClub.Data;
 using HogwartsRunningClub.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using HogwartsRunningClub.Models.ViewModels.TopicViewModels;
 
 namespace HogwartsRunningClub.Controllers
 {
@@ -15,18 +17,58 @@ namespace HogwartsRunningClub.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public CommentsController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public CommentsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        public async Task<IActionResult> GetComments(int id) 
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
+        public async Task<IActionResult> GetComments(int id)
         {
             List<Comment> comments = await _context.Comment
+                .Include(c => c.User)
                 .ToListAsync();
 
-            
-            return Json(comments);
+            List<Comment> returnableComments = new List<Comment>();
+
+            foreach (Comment c in comments)
+            {
+                Comment newC = new Comment();
+                newC.CommentId = c.CommentId;
+                newC.Content = c.Content;
+                newC.DateCreated = c.DateCreated;
+                newC.TopicId = c.TopicId;
+                newC.UserId = c.User.UserName;
+
+                returnableComments.Add(newC);
+            }
+
+
+            return Json(returnableComments);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateComment(int TopicId, DetailsTopicViewModel viewmodel) 
+        {
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            Comment comment = new Comment()
+            {
+                UserId = user.Id,
+                Content = viewmodel.Content,
+                TopicId = TopicId
+            };
+
+            _context.Add(comment);
+            await _context.SaveChangesAsync();
+
+
+            return RedirectToAction("Details", "Topics", new { id = TopicId });
+
         }
 
         //// GET: Comments
