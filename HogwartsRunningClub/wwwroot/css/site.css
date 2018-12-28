@@ -88,6 +88,34 @@ body {
 }
 
 
+.comment-img {
+    width: 64px !important;
+    height: 64px !important;
+}
+
+.progress-bar-striped-Gryffindor {
+    background-color: #e60000 !important;
+    background-image: linear-gradient( 45deg, rgba( 255, 209, 26, .45 ) 25%, transparent 25%, transparent 50%, rgba( 255, 209, 26, .45 ) 50%, rgba( 255, 209, 26, .45 ) 75%, transparent 75%, transparent );
+    background-size: 1rem 1rem;
+}
+
+.progress-bar-striped-Hufflepuff {
+    background-color: #ffd633 !important;
+    background-image: linear-gradient( 45deg, rgba( 13, 13, 13, .55 ) 25%, transparent 25%, transparent 50%, rgba( 13, 13, 13, .55 ) 50%, rgba( 13, 13, 13, .55 ) 75%, transparent 75%, transparent );
+    background-size: 1rem 1rem;
+}
+
+.progress-bar-striped-Ravenclaw {
+    background-color: #0000e6 !important;
+    background-image: linear-gradient( 45deg, rgba( 255, 117, 26, .55 ) 25%, transparent 25%, transparent 50%, rgba( 255, 117, 26, .55 ) 50%, rgba( 255, 117, 26, .55 ) 75%, transparent 75%, transparent );
+    background-size: 1rem 1rem;
+}
+
+.progress-bar-striped-Slytherin {
+    background-color: #008000 !important;
+    background-image: linear-gradient( 45deg, rgba( 166, 166, 166, .55 ) 25%, transparent 25%, transparent 50%, rgba( 166, 166, 166, .55 ) 50%, rgba( 166, 166, 166, .55 ) 75%, transparent 75%, transparent );
+    background-size: 1rem 1rem;
+}
 
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {

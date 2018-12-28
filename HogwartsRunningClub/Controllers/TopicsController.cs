@@ -44,8 +44,10 @@ namespace HogwartsRunningClub.Controllers
             Topic topic = await _context.Topic
                 .Include(t => t.TopicCategory)
                 .Include(t => t.User)
+                .ThenInclude(u => u.House)
                 .Include(t => t.Comments)
                 .ThenInclude(c => c.User)
+                .ThenInclude(u => u.House)
                 .FirstOrDefaultAsync(m => m.TopicId == id);
 
             topic.Comments = topic.Comments.OrderByDescending(c => c.DateCreated).ToList();
@@ -135,11 +137,11 @@ namespace HogwartsRunningClub.Controllers
 
                 if (viewmodel.Topic.HouseExclusive == true)
                 {
-                    return RedirectToAction("ViewCommonRoom", "Home");
+                    return RedirectToAction("ViewCommonRoom", "Home", new { category = "All"});
                 }
                 else
                 { 
-                    return RedirectToAction("ViewGreatHall", "Home");
+                    return RedirectToAction("ViewGreatHall", "Home", new { category = "All" });
                 }
 
             }

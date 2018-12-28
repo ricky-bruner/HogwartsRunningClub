@@ -5,7 +5,13 @@
 }
 
 <div class="d-flex justify-content-between">
-    <h2>@Model.Topic.User.UserName</h2>
+    <div class="d-flex">
+        @if (Model.Topic.User.ImagePath == null)
+        {
+            <img class="comment-img mr-3 img-thumbnail" src="~/images/DefaultImage@(Model.Topic.User.House.Title).png" alt="@Model.Topic.User.UserName Image">
+        }
+        <h2 class="mt-2">@Model.Topic.User.UserName</h2>
+    </div>
     @if (Model.Edit)
     {
         <div class="justify-content-end">
@@ -37,29 +43,31 @@
                 <ul class="list-unstyled p-2">
                     @foreach (Comment comment in Model.Topic.Comments)
                     {
-                        <li class="media">
-                            <img class="mr-3" src="..." alt="User Image">
-                            <div class="media-body">
-                                @if (Model.Topic.User.UserName == comment.User.UserName)
-                                {
-                                    <h5 class="mt-0 mb-1 text-primary">@comment.User.UserName <span class="text-info"><small>*Topic Creater*</small></span></h5>
-
-                                } else 
-                                { 
-                                    <h5 class="mt-0 mb-1 text-primary">@comment.User.UserName</h5>
-                                }
-                                <div class="lead" id="comment-content-@comment.CommentId">@comment.Content</div>
-                                <p class="mb-0 text-right"><small>@comment.DateCreated</small></p>
-                                @if (comment.User.UserName == Model.User.UserName)
-                                {
+                    <li class="media">
+                        @if (comment.User.ImagePath == null)
+                        {
+                            <img class="comment-img mr-3 img-thumbnail" src="~/images/DefaultImage@(comment.User.House.Title).png" alt="@comment.User.UserName Image">
+                        }
+                        <div class="media-body">
+                            @if (Model.Topic.User.UserName == comment.User.UserName)
+                            {
+                                <h5 class="mt-0 mb-1 text-primary">@comment.User.UserName <span class="text-info"><small>*Topic Creater*</small></span></h5>
+                            }
+                            else
+                            {
+                                <h5 class="mt-0 mb-1 text-primary">@comment.User.UserName</h5>
+                            }
+                            <div class="lead" id="comment-content-@comment.CommentId">@comment.Content</div>
+                            <p class="mb-0 text-right"><small>@comment.DateCreated</small></p>
+                            @if (comment.User.UserName == Model.User.UserName)
+                            {
                                 <div class="form-group d-flex justify-content-end">
                                     <button class="btn btn-link" id="edit-comment-btn-@comment.CommentId">Edit</button>
-                                    <!-- Button trigger modal -->
+
                                     <button type="button" class="btn btn-link" data-toggle="modal" data-target="#deleteModal">
                                         Delete
                                     </button>
 
-                                    <!-- Modal -->
                                     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
@@ -77,7 +85,7 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                    <form asp-controller="Comments" asp-action="DeleteComment" asp-route-id="@comment.CommentId" method="post">
+                                                    <form asp-controller="Comments" asp-action="DeleteComment" asp-route-id="@comment.CommentId"                method="post">
                                                         <button class="btn btn-danger">Delete</button>
                                                     </form>
                                                 </div>
@@ -85,10 +93,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                }
-                                <hr />
-                            </div>
-                        </li>
+                            }
+                            <hr />
+                        </div>
+                    </li>
                     }
                 </ul>
             }
