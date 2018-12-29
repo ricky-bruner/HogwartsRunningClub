@@ -33,9 +33,14 @@
         </div>
         <hr />
         <div id="comment-form">
-            <div class="form-group row justify-content-md-center">
-                <button class="btn btn-sm btn-primary" id="add-comment-btn">Comment</button>
+            <div id="add-comment-btn-container">
+                <div class="form-group row justify-content-md-center">
+                    <button class="btn btn-sm btn-primary" id="add-comment-btn">Comment</button>
+                </div>
             </div>
+            <form asp-controller="Comments" asp-action="CreateComment" asp-route-TopicId="@Model.Topic.TopicId" id="add-comment-form">
+                    
+            </form>
         </div>
         <div id="comments-container">
             @if (Model.Topic.Comments.Count > 0)
@@ -57,8 +62,11 @@
                             {
                                 <h5 class="mt-0 mb-1 text-primary">@comment.User.UserName</h5>
                             }
+                            
                             <div class="lead" id="comment-content-@comment.CommentId">@comment.Content</div>
+                            
                             <p class="mb-0 text-right"><small>@comment.DateCreated</small></p>
+                            
                             @if (comment.User.UserName == Model.User.UserName)
                             {
                                 <div class="form-group d-flex justify-content-end">
@@ -94,12 +102,15 @@
                                     </div>
                                 </div>
                             }
+
                             <hr />
                         </div>
                     </li>
                     }
+
                 </ul>
             }
+
         </div>
     </div>
 </div>

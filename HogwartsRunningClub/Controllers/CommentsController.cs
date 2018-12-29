@@ -28,6 +28,8 @@ namespace HogwartsRunningClub.Controllers
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
+        
+        //Get A single comment, primary task is to return JSON to a user who is cancelling an Edit.
         public async Task<IActionResult> GetComment(int id)
         {
             ApplicationUser user = await GetCurrentUserAsync();
@@ -36,7 +38,7 @@ namespace HogwartsRunningClub.Controllers
 
             if (comment.UserId != user.Id) 
             {
-                return RedirectToAction("ViewGreatHall", "Home");
+                return RedirectToAction("ViewGreatHall", "Home", new { category = "All" });
             }
 
             CommentJson commentJson = new CommentJson();
@@ -45,143 +47,73 @@ namespace HogwartsRunningClub.Controllers
             return Json(commentJson);
         }
 
+
+        //Post Create a comment, no GET due to being dynamically rendered via JavaScript
         [HttpPost]
-        public async Task<IActionResult> CreateComment(int TopicId, DetailsTopicViewModel viewmodel) 
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateComment(int TopicId, Comment Comment) 
         {
             ApplicationUser user = await GetCurrentUserAsync();
 
-            Comment comment = new Comment()
-            {
-                UserId = user.Id,
-                Content = viewmodel.Content,
-                TopicId = TopicId
-            };
+            Comment.UserId = user.Id;
 
-            _context.Add(comment);
+            _context.Add(Comment);
             await _context.SaveChangesAsync();
-
 
             return RedirectToAction("Details", "Topics", new { id = TopicId });
 
         }
 
-        //// GET: Comments
-        //public async Task<IActionResult> Index()
-        //{
-        //    var applicationDbContext = _context.Comment.Include(c => c.Topic).Include(c => c.User);
-        //    return View(await applicationDbContext.ToListAsync());
-        //}
 
-        //// GET: Comments/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var comment = await _context.Comment
-        //        .Include(c => c.Topic)
-        //        .Include(c => c.User)
-        //        .FirstOrDefaultAsync(m => m.CommentId == id);
-        //    if (comment == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(comment);
-        //}
-
-        //// GET: Comments/Create
-        //public IActionResult Create()
-        //{
-        //    ViewData["TopicId"] = new SelectList(_context.Topic, "TopicId", "Content");
-        //    ViewData["UserId"] = new SelectList(_context.ApplicationUser, "Id", "Id");
-        //    return View();
-        //}
-
-        //// POST: Comments/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("CommentId,Content,DateCreated,UserId,TopicId")] Comment comment)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(comment);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["TopicId"] = new SelectList(_context.Topic, "TopicId", "Content", comment.TopicId);
-        //    ViewData["UserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", comment.UserId);
-        //    return View(comment);
-        //}
-
-        //// GET: Comments/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var comment = await _context.Comment.FindAsync(id);
-        //    if (comment == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    ViewData["TopicId"] = new SelectList(_context.Topic, "TopicId", "Content", comment.TopicId);
-        //    ViewData["UserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", comment.UserId);
-        //    return View(comment);
-        //}
-
-        // POST: Comments/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Comments/Edit/5 -- No GET due to JavaScript dynamic rendering
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> EditComment(int CommentId, Comment Comment)
         {
+            ApplicationUser user = await GetCurrentUserAsync();
+            
             Comment comment = await _context.Comment.FindAsync(CommentId);
-            comment.Content = Comment.Content;
 
-            _context.Update(comment);
-            await _context.SaveChangesAsync();
+            if (comment.UserId != user.Id)
+            {
+                return RedirectToAction("ViewGreatHall", "Home", new { category = "All" });
+            }
+            else 
+            { 
+                comment.Content = Comment.Content;
 
-            return RedirectToAction("Details", "Topics", new { id = comment.TopicId });
+                _context.Update(comment);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Details", "Topics", new { id = comment.TopicId });
+            
+            }
         }
 
-        //// GET: Comments/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var comment = await _context.Comment
-        //        .Include(c => c.Topic)
-        //        .Include(c => c.User)
-        //        .FirstOrDefaultAsync(m => m.CommentId == id);
-        //    if (comment == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(comment);
-        //}
 
         // POST: Comments/Delete/5
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteComment(int id)
         {
-            var comment = await _context.Comment.FindAsync(id);
-            int topicId = comment.TopicId;
-            _context.Comment.Remove(comment);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Details", "Topics", new { id = topicId });
+            ApplicationUser user = await GetCurrentUserAsync();
+        
+            Comment comment = await _context.Comment.FindAsync(id);
+
+            if (comment.UserId != user.Id) 
+            {
+                return RedirectToAction("ViewGreatHall", "Home", new { category = "All" });
+            } 
+            else 
+            { 
+                int topicId = comment.TopicId;
+
+                _context.Comment.Remove(comment);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Details", "Topics", new { id = topicId });
+            }
+
         }
 
         private bool CommentExists(int id)

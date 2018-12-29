@@ -62,31 +62,10 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="All">Great Hall</a>
                     </li>
-                    @if (UserManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).HouseId == 1)
-                    {
-                        <li class="nav-item bg-danger rounded">
-                            <a class="nav-link text-warning" asp-area="" asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="All">Common Room</a>
-                        </li>
-
-                    }
-                    else if (UserManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).HouseId == 2)
-                    {
-                        <li class="nav-item bg-warning rounded">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="All">Common Room</a>
-                        </li>
-                    }
-                    else if (UserManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).HouseId == 3)
-                    {
-                        <li class="nav-item bg-primary rounded">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="All">Common Room</a>
-                        </li>
-                    }
-                    else if (UserManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).HouseId == 4)
-                    {
-                        <li class="nav-item bg-success rounded">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="All">Common Room</a>
-                        </li>
-                    }
+                    <li class="nav-item bg-@UserManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).House.Title rounded">
+                        <a class="nav-link text-warning" asp-area="" asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="All">Common Room</a>
+                    </li>
+                    
                 }
             </ul>
             <partial name="_LoginPartial" />

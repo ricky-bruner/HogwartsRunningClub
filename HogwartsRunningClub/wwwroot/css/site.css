@@ -93,9 +93,25 @@ body {
     height: 64px !important;
 }
 
+.bg-Gryffindor {
+    background-color: #e60000 !important;
+}
+
+.bg-Hufflepuff {
+    background-color: #ffd633 !important;
+}
+
+.bg-Ravenclaw {
+    background-color: #0000e6 !important;
+}
+
+.bg-Slytherin {
+    background-color: #008000 !important;
+}
+
 .progress-bar-striped-Gryffindor {
     background-color: #e60000 !important;
-    background-image: linear-gradient( 45deg, rgba( 255, 209, 26, .45 ) 25%, transparent 25%, transparent 50%, rgba( 255, 209, 26, .45 ) 50%, rgba( 255, 209, 26, .45 ) 75%, transparent 75%, transparent );
+    background-image: linear-gradient( 45deg, rgba( 255, 209, 26, .55 ) 25%, transparent 25%, transparent 50%, rgba( 255, 209, 26, .55 ) 50%, rgba( 255, 209, 26, .55 ) 75%, transparent 75%, transparent );
     background-size: 1rem 1rem;
 }
 
