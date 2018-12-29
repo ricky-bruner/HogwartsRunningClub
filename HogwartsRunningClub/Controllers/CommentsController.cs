@@ -67,7 +67,7 @@ namespace HogwartsRunningClub.Controllers
 
         // POST: Comments/Edit/5 -- No GET due to JavaScript dynamic rendering
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditComment(int CommentId, Comment Comment)
         {
             ApplicationUser user = await GetCurrentUserAsync();

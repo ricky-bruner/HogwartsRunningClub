@@ -62,8 +62,8 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="All">Great Hall</a>
                     </li>
-                    <li class="nav-item bg-@UserManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).House.Title rounded">
-                        <a class="nav-link text-warning" asp-area="" asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="All">Common Room</a>
+                    <li class="nav-item">
+                        <a class="nav-link btn-@UserManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).House.Title rounded" asp-area="" asp-controller="Home" asp-action="ViewCommonRoom" asp-route-category="All">Common Room</a>
                     </li>
                     
                 }

@@ -53,6 +53,8 @@ namespace HogwartsRunningClub.Controllers
             topic.Comments = topic.Comments.OrderByDescending(c => c.DateCreated).ToList();
 
             ApplicationUser user = await GetCurrentUserAsync();
+            House house = await _context.House.SingleOrDefaultAsync(h => h.HouseId == user.HouseId);
+            user.House = house;
 
             if (topic == null)
             {

@@ -35,7 +35,7 @@
         <div id="comment-form">
             <div id="add-comment-btn-container">
                 <div class="form-group row justify-content-md-center">
-                    <button class="btn btn-sm btn-primary" id="add-comment-btn">Comment</button>
+                    <button class="btn btn-sm btn-@Model.User.House.Title" id="add-comment-btn">Comment</button>
                 </div>
             </div>
             <form asp-controller="Comments" asp-action="CreateComment" asp-route-TopicId="@Model.Topic.TopicId" id="add-comment-form">
@@ -56,15 +56,19 @@
                         <div class="media-body">
                             @if (Model.Topic.User.UserName == comment.User.UserName)
                             {
-                                <h5 class="mt-0 mb-1 text-primary">@comment.User.UserName <span class="text-info"><small>*Topic Creater*</small></span></h5>
+                                <h5 class="mt-0 mb-1 text-@comment.User.House.Title">@comment.User.UserName <span class="text-info"><small>*Topic Creater*</small></span></h5>
                             }
                             else
                             {
-                                <h5 class="mt-0 mb-1 text-primary">@comment.User.UserName</h5>
+                                <h5 class="mt-0 mb-1 text-@comment.User.House.Title">@comment.User.UserName</h5>
                             }
                             
                             <div class="lead" id="comment-content-@comment.CommentId">@comment.Content</div>
-                            
+                            @if (comment.User.UserName == Model.User.UserName) 
+                             { 
+                                <form id="edit-comment-form-@comment.CommentId" asp-controller="Comments" asp-action="EditComment" asp-route-CommentId="@comment.CommentId"></form>
+                             }
+
                             <p class="mb-0 text-right"><small>@comment.DateCreated</small></p>
                             
                             @if (comment.User.UserName == Model.User.UserName)

@@ -133,6 +133,66 @@ body {
     background-size: 1rem 1rem;
 }
 
+.text-Gryffindor {
+    color: #e60000 !important;
+}
+
+.text-Hufflepuff {
+    color: #ffd633 !important;
+}
+
+.text-Ravenclaw {
+    color: #0000e6 !important;
+}
+
+.text-Slytherin {
+    color: #008000 !important;
+}
+
+.btn-Gryffindor {
+    color: rgb( 255, 209, 26 ) !important;
+    background-color: #e60000;
+    border-color: #e60000;
+}
+
+.btn-Gryffindor:hover {
+    background-color: #cc0000;
+    border-color: #cc0000;
+}
+
+.btn-Hufflepuff {
+    color: #000000 !important;
+    background-color: #ffd633;
+    border-color: #ffd633;
+}
+
+.btn-Hufflepuff:hover {
+    background-color: #ffcc00;
+    border-color: #ffcc00;
+}
+
+.btn-Ravenclaw {
+    color: rgb( 255, 117, 26 ) !important; 
+    background-color: #0000e6;
+    border-color: #0000e6;
+}
+
+.btn-Ravenclaw:hover {
+    background-color: #0000cc;
+    border-color: #0000cc;
+}
+
+.btn-Slytherin {
+    color: #f2f2f2 !important;
+    background-color: #008000;
+    border-color: #008000;
+}
+
+.btn-Slytherin:hover {
+    background-color: #006600;
+    border-color: #006600;
+}
+
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */
