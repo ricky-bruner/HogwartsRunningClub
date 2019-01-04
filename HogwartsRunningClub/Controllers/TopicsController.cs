@@ -90,8 +90,13 @@ namespace HogwartsRunningClub.Controllers
         }
 
         // GET: Topics/Create
-        public async Task<IActionResult> Create(string id)
+        public async Task<IActionResult> Create(bool? House)
         {
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            House house = await _context.House.FirstOrDefaultAsync(h => h.HouseId == user.HouseId);
+            user.House = house;
+            
             CreateTopicViewModel viewmodel = new CreateTopicViewModel();
 
             List<TopicCategory> categories = await _context.TopicCategory.ToListAsync();
@@ -105,7 +110,7 @@ namespace HogwartsRunningClub.Controllers
                         };
             }).ToList();
 
-            if (id != null) 
+            if (House != false) 
             {
                 Topic topic = new Topic();
                 topic.HouseExclusive = true;
@@ -113,6 +118,7 @@ namespace HogwartsRunningClub.Controllers
             }
 
             viewmodel.CategoryOptions = categoryOptions;
+            viewmodel.User = user;
 
             return View(viewmodel);
         }

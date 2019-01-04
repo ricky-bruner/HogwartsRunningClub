@@ -95,7 +95,7 @@ namespace HogwartsRunningClub.Controllers
         }
 
 
-        public async Task<IActionResult> ViewGreatHall(int? page, string category) 
+        public async Task<IActionResult> ViewGreatHall(int? page, string category, string search) 
         {
             ApplicationUser user = await GetCurrentUserAsync();
             
@@ -105,7 +105,18 @@ namespace HogwartsRunningClub.Controllers
             
             List<Topic> topics = new List<Topic>();
 
-            if (category == "All")
+            if (search != null) 
+            {
+                topics = await _context.Topic
+                        .Include(t => t.Comments)
+                        .ThenInclude(c => c.User)
+                        .Include(t => t.User)
+                        .ThenInclude(u => u.House)
+                        .OrderByDescending(t => t.DateCreated)
+                        .Where(t => t.HouseExclusive == false && t.Title.Contains(search) || t.Content.Contains(search))
+                        .ToListAsync();
+            }
+            else if (category == "All")
             {
                 topics = await _context.Topic
                         .Include(t => t.Comments)
