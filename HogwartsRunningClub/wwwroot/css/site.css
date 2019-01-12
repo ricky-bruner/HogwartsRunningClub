@@ -190,6 +190,11 @@ for details on configuring this project to bundle and minify static web assets. 
     border-color: #006600;
 }
 
+
+pre {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */

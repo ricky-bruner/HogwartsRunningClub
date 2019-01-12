@@ -11,6 +11,10 @@ using Microsoft.AspNetCore.Authorization;
 using HogwartsRunningClub.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using HogwartsRunningClub.Models.ViewModels.PaginationModels;
+using Microsoft.EntityFrameworkCore.Internal;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace HogwartsRunningClub.Controllers
 {
@@ -218,6 +222,28 @@ namespace HogwartsRunningClub.Controllers
 
 
             return View("CommonRoom", viewmodel);
+        }
+
+        public Task<string> Giphy(string q)
+        {
+
+            string APIKey = "2hQWf6oBnBjUicY5yBYwgVT9ecVh5X9y";
+
+            string url = "http://api.giphy.com/v1/gifs/search?q=" + q + "&api_key=" + APIKey + "&limit=20";
+
+            HttpClient http = new HttpClient();
+            
+            //string data = http.PostAsync(url, new StringContent("Data", Encoding.UTF32, "application/json")).Result.Content.ReadAsStringAsync().Result;
+
+            //for calling get
+
+            var results = http.GetAsync(url).Result.Content.ReadAsStringAsync();
+
+
+            var gifLinks = results.Result;
+
+
+            return results;
         }
 
         public IActionResult Privacy()
