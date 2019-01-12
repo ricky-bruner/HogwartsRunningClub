@@ -3,7 +3,7 @@
 
 // Write your JavaScript code.
 
-// Giphy API Key 2hQWf6oBnBjUicY5yBYwgVT9ecVh5X9y
+// 2hQWf6oBnBjUicY5yBYwgVT9ecVh5X9y
 
 fetch(`/home/giphy?q=harry+potter`)
     .then(res => res.json())
@@ -18,8 +18,4 @@ fetch(`/home/giphy?q=harry+potter`)
     });
 
 
-//var xhr = $.get("http://api.giphy.com/v1/gifs/search?q=harry+potter&api_key=2hQWf6oBnBjUicY5yBYwgVT9ecVh5X9y&limit=5");
-//xhr.done(function (data) {
-//    console.log("success got data", data);
-//});
 
