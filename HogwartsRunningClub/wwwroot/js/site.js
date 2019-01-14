@@ -3,7 +3,6 @@
 
 // Write your JavaScript code.
 
-// 2hQWf6oBnBjUicY5yBYwgVT9ecVh5X9y
 
 fetch(`/home/giphy?q=harry+potter`)
     .then(res => res.json())

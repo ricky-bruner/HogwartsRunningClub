@@ -15,20 +15,27 @@ using Microsoft.EntityFrameworkCore.Internal;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Web;
+using Microsoft.Extensions.Options;
 
 namespace HogwartsRunningClub.Controllers
 {
     [Authorize]
     public class HomeController : Controller
     {
+        private static readonly HttpClient _http = new HttpClient();
         private readonly ApplicationDbContext _context;
-
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly Config _config;
 
-        public HomeController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public HomeController(
+            ApplicationDbContext context, 
+            UserManager<ApplicationUser> userManager,
+            IOptions<Config> configOptions)
         {
             _context = context;
             _userManager = userManager;
+            _config = configOptions.Value;
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
@@ -224,18 +231,15 @@ namespace HogwartsRunningClub.Controllers
             return View("CommonRoom", viewmodel);
         }
 
-        public Task<string> Giphy(string q)
+        public async Task<IActionResult> Giphy(string q)
         {
+            string query = HttpUtility.UrlEncode(q);
+            string url = $"http://api.giphy.com/v1/gifs/search?q={query}&api_key={_config.GiphyApiKey}&limit=20";
 
-            string randomNotVeryImportantThingAtAll = "2hQWf6oBnBjUicY5yBYwgVT9ecVh5X9y";
+            var response = await _http.GetAsync(url);
+            var jsonResult = await response.Content.ReadAsStringAsync();
 
-            string url = "http://api.giphy.com/v1/gifs/search?q=" + q + "&api_key=" + randomNotVeryImportantThingAtAll + "&limit=20";
-
-            HttpClient http = new HttpClient();
-            
-            var results = http.GetAsync(url).Result.Content.ReadAsStringAsync();
-
-            return results;
+            return Content(jsonResult);
         }
 
         public IActionResult Privacy()
