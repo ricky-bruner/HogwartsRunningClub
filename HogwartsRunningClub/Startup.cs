@@ -34,6 +34,7 @@ namespace HogwartsRunningClub
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            services.Configure<Config>(Configuration.GetSection("Config"));
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(

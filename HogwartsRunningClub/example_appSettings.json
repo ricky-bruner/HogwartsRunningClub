@@ -1,0 +1,8 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "__SQL Server Connection String__"
+  },
+  "Config": {
+    "GiphyApiKey": "__Giphy API Key__"
+  }
+}
