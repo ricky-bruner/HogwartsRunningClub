@@ -12,5 +12,7 @@ namespace HogwartsRunningClub.Models.ViewModels.TopicViewModels
 
         public List<SelectListItem> CategoryOptions { get; set; }
 
+        public ApplicationUser User { get; set; }
+
     }
 }

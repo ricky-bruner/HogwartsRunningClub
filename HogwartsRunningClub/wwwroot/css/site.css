@@ -1,9 +1,6 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
 for details on configuring this project to bundle and minify static web assets. */
-body {
-    padding-top: 50px;
-    padding-bottom: 20px;
-}
+
 
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
@@ -75,6 +72,7 @@ body {
 .page-body {
     display: block;
     width: 100%;
+    margin-top: 3em;
 }
 
 
@@ -87,6 +85,115 @@ body {
 }
 
 
+.comment-img {
+    width: 64px !important;
+    height: 64px !important;
+}
+
+.bg-Gryffindor {
+    background-color: #e60000 !important;
+}
+
+.bg-Hufflepuff {
+    background-color: #ffd633 !important;
+}
+
+.bg-Ravenclaw {
+    background-color: #0000e6 !important;
+}
+
+.bg-Slytherin {
+    background-color: #008000 !important;
+}
+
+.progress-bar-striped-Gryffindor {
+    background-color: #e60000 !important;
+    background-image: linear-gradient( 45deg, rgba( 255, 209, 26, .55 ) 25%, transparent 25%, transparent 50%, rgba( 255, 209, 26, .55 ) 50%, rgba( 255, 209, 26, .55 ) 75%, transparent 75%, transparent );
+    background-size: 1rem 1rem;
+}
+
+.progress-bar-striped-Hufflepuff {
+    background-color: #ffd633 !important;
+    background-image: linear-gradient( 45deg, rgba( 13, 13, 13, .55 ) 25%, transparent 25%, transparent 50%, rgba( 13, 13, 13, .55 ) 50%, rgba( 13, 13, 13, .55 ) 75%, transparent 75%, transparent );
+    background-size: 1rem 1rem;
+}
+
+.progress-bar-striped-Ravenclaw {
+    background-color: #0000e6 !important;
+    background-image: linear-gradient( 45deg, rgba( 255, 117, 26, .55 ) 25%, transparent 25%, transparent 50%, rgba( 255, 117, 26, .55 ) 50%, rgba( 255, 117, 26, .55 ) 75%, transparent 75%, transparent );
+    background-size: 1rem 1rem;
+}
+
+.progress-bar-striped-Slytherin {
+    background-color: #008000 !important;
+    background-image: linear-gradient( 45deg, rgba( 166, 166, 166, .55 ) 25%, transparent 25%, transparent 50%, rgba( 166, 166, 166, .55 ) 50%, rgba( 166, 166, 166, .55 ) 75%, transparent 75%, transparent );
+    background-size: 1rem 1rem;
+}
+
+.text-Gryffindor {
+    color: #e60000 !important;
+}
+
+.text-Hufflepuff {
+    color: #ffcc00 !important;
+}
+
+.text-Ravenclaw {
+    color: #0000e6 !important;
+}
+
+.text-Slytherin {
+    color: #008000 !important;
+}
+
+.btn-Gryffindor {
+    color: rgb( 255, 209, 26 ) !important;
+    background-color: #e60000;
+    border-color: #e60000;
+}
+
+.btn-Gryffindor:hover {
+    background-color: #cc0000;
+    border-color: #cc0000;
+}
+
+.btn-Hufflepuff {
+    color: #000000 !important;
+    background-color: #ffd633;
+    border-color: #ffd633;
+}
+
+.btn-Hufflepuff:hover {
+    background-color: #ffcc00;
+    border-color: #ffcc00;
+}
+
+.btn-Ravenclaw {
+    color: rgb( 255, 117, 26 ) !important; 
+    background-color: #0000e6;
+    border-color: #0000e6;
+}
+
+.btn-Ravenclaw:hover {
+    background-color: #0000cc;
+    border-color: #0000cc;
+}
+
+.btn-Slytherin {
+    color: #f2f2f2 !important;
+    background-color: #008000;
+    border-color: #008000;
+}
+
+.btn-Slytherin:hover {
+    background-color: #006600;
+    border-color: #006600;
+}
+
+
+pre {
+    font-family: Arial, Helvetica, sans-serif;
+}
 
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {

@@ -7,14 +7,19 @@
 <div>
     <h2>Great Hall</h2>
     <div>
-        <form asp-controller="Topics" asp-action="Create" method="get">
-            <div class="form-group">
-                <button class="btn btn-primary">Post a Topic</button>
-            </div>
+        <a asp-controller="Topics" asp-action="Create" asp-route-House="false" class="btn btn-sm btn-primary">
+           Post a Topic
+        </a>
+    </div>
+    <div class="form-group">
+        <form asp-controller="Home" asp-action="ViewGreatHall">
+            <h4>Search for a Topic</h4>
+            <input class="form-control" type="text" name="search" value="" />
         </form>
     </div>
-    <div class="col-md-12">
-        <div class="row">
+
+    <div>
+        <div class="d-flex justify-content-around">
             <a asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="All" class="btn btn-sm btn-primary">All</a>
             @for (var i = 0; i < @Model.TopicCategories.Count; i++)
             {
@@ -22,43 +27,84 @@
             }
         </div>
         <div id="topic-container">
-            @foreach (Topic topic in Model.NonExclusiveTopics)
-            {
-                <h5 class="col-md-12 topic">
-                    <a asp-controller="Topics" asp-action="Details" asp-route-id="@topic.TopicId">@topic.Title - @topic.User.UserName</a>
-                </h5>
-            }
-
             @if (Model.Pager.EndPage > 1)
             {
-                <ul class="pagination">
-                    @if (Model.Pager.CurrentPage > 1)
-                    {
-                        <li>
-                            <a asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="@Model.Category">First</a>
-                        </li>
-                        <li>
-                            <a asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="@Model.Category" asp-route-page="@(Model.Pager.CurrentPage - 1)">Previous</a>
-                        </li>
-                    }
+                <nav class="d-flex justify-content-center mt-2" aria-label="Page Navigation">
+                    <ul class="pagination">
+                        @if (Model.Pager.CurrentPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="@Model.Category">First</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="@Model.Category" asp-route-page="@(Model.Pager.CurrentPage - 1)">Previous</a>
+                            </li>
+                        }
 
-                    @for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
-                    {
-                        <li class="@(page == Model.Pager.CurrentPage ? "active" : "")">
-                            <a asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="@Model.Category" asp-route-page="@(page)">@(page)</a>
-                        </li>
-                    }
+                        @for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+                        {
+                            <li class="page-item @(page == Model.Pager.CurrentPage ? "active" : "")">
+                                <a class="page-link" asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="@Model.Category" asp-route-page="@(page)">@(page)</a>
+                            </li>
+                        }
 
-                    @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
-                    {
-                        <li>
-                            <a asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="@Model.Category" asp-route-page="@(Model.Pager.CurrentPage + 1)">Next</a>
-                        </li>
-                        <li>
-                            <a asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="@Model.Category" asp-route-page="@(Model.Pager.TotalPages)">Last</a>
-                        </li>
-                    }
-                </ul>
+                        @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="@Model.Category" asp-route-page="@(Model.Pager.CurrentPage + 1)">Next</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="@Model.Category" asp-route-page="@(Model.Pager.TotalPages)">Last</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+            <div class="topic-links">
+                @foreach (Topic topic in Model.NonExclusiveTopics)
+                {
+                    <div>
+                        <hr />
+                        <h5 class="topic d-flex justify-content-start">
+                            <img class="comment-img mr-3 img-thumbnail" src="~/images/DefaultImage@(topic.User.House.Title).png" alt="@topic.User.UserName"/>
+                            <a class="text-dark mt-3" asp-controller="Topics" asp-action="Details" asp-route-id="@topic.TopicId">@topic.Title - <span class="text-@topic.User.House.Title">@topic.User.UserName</span> - (@topic.Comments.Count) Comments</a>
+                        </h5>
+                        <hr />
+                    </div>
+                }
+            </div>
+            @if (Model.Pager.EndPage > 1)
+            {
+                <nav class="d-flex justify-content-center mt-2" aria-label="Page Navigation">
+                    <ul class="pagination">
+                        @if (Model.Pager.CurrentPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="@Model.Category">First</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="@Model.Category" asp-route-page="@(Model.Pager.CurrentPage - 1)">Previous</a>
+                            </li>
+                        }
+
+                        @for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+                        {
+                            <li class="page-item @(page == Model.Pager.CurrentPage ? "active" : "")">
+                                <a class="page-link" asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="@Model.Category" asp-route-page="@(page)">@(page)</a>
+                            </li>
+                        }
+
+                        @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="@Model.Category" asp-route-page="@(Model.Pager.CurrentPage + 1)">Next</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" asp-controller="Home" asp-action="ViewGreatHall" asp-route-category="@Model.Category" asp-route-page="@(Model.Pager.TotalPages)">Last</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
             }
         </div>
     </div>

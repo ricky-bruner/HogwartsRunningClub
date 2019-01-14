@@ -4,57 +4,119 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
-
-<div>
-    <h4>Topic</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Topic.Title)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Topic.Title)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Topic.Content)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Topic.Content)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Topic.DateCreated)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Topic.DateCreated)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Topic.TotalViews)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Topic.TotalViews)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Topic.TopicCategory)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Topic.TopicCategory.Label)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Topic.User)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Topic.User.UserName)
-        </dd>
-    </dl>
+<div class="d-flex justify-content-between">
+    <div class="d-flex">
+        @if (Model.Topic.User.ImagePath == null)
+        {
+            <img class="comment-img mr-3 img-thumbnail" src="~/images/DefaultImage@(Model.Topic.User.House.Title).png" alt="@Model.Topic.User.UserName Image">
+        }
+        <h2 class="mt-2">@Model.Topic.User.UserName</h2>
+    </div>
+    @if (Model.Edit)
+    {
+        <div class="justify-content-end">
+                <a asp-action="Edit" asp-route-id="@Model.Topic.TopicId" class="btn btn-sm btn-warning mt-2 mr-2">Edit</a>
+                <a asp-action="Delete" asp-route-id="@Model.Topic.TopicId" class="btn btn-sm btn-danger mt-2 mr-2">Delete</a>
+        </div>
+    }
 </div>
 
-@if (Model.Edit) 
- { 
-    <div>
-        <a asp-action="Edit" asp-route-id="@Model.Topic.TopicId" class="btn btn-sm btn-warning">Edit</a>
+<div>
+    <hr />
+    <div class="topic-card" id="topic-@Model.Topic.TopicId">
+        <span>Total Views: @Model.Topic.TotalViews</span>
+        <h3>@Model.Topic.Title</h3>
+        <span>Posted On: @Model.Topic.DateCreated</span>
+        <hr />
+        <div>
+            <p><pre class="card-text">@Model.Topic.Content</pre></p>
+        </div>
+        <hr />
+        <div id="comment-form">
+            <div id="add-comment-btn-container">
+                <div class="form-group row justify-content-md-center">
+                    <button class="btn btn-sm btn-@Model.User.House.Title" id="add-comment-btn">Comment</button>
+                </div>
+            </div>
+            <form asp-controller="Comments" asp-action="CreateComment" asp-route-TopicId="@Model.Topic.TopicId" id="add-comment-form">
+                    
+            </form>
+        </div>
+        <div id="comments-container">
+            @if (Model.Topic.Comments.Count > 0)
+            {
+                <ul class="list-unstyled p-2">
+                    @foreach (Comment comment in Model.Topic.Comments)
+                    {
+                    <li class="media">
+                        @if (comment.User.ImagePath == null)
+                        {
+                            <img class="comment-img mr-3 img-thumbnail" src="~/images/DefaultImage@(comment.User.House.Title).png" alt="@comment.User.UserName Image">
+                        }
+                        <div class="media-body">
+                            @if (Model.Topic.User.UserName == comment.User.UserName)
+                            {
+                                <h5 class="mt-0 mb-1 text-@comment.User.House.Title">@comment.User.UserName <span class="text-info"><small>*Topic Creater*</small></span></h5>
+                            }
+                            else
+                            {
+                                <h5 class="mt-0 mb-1 text-@comment.User.House.Title">@comment.User.UserName</h5>
+                            }
+                            
+                            <div class="lead" id="comment-content-@comment.CommentId">@comment.Content</div>
+                            @if (comment.User.UserName == Model.User.UserName) 
+                             { 
+                                <form id="edit-comment-form-@comment.CommentId" asp-controller="Comments" asp-action="EditComment" asp-route-CommentId="@comment.CommentId"></form>
+                             }
+
+                            <p class="mb-0 text-right"><small>@comment.DateCreated</small></p>
+                            
+                            @if (comment.User.UserName == Model.User.UserName)
+                            {
+                                <div class="form-group d-flex justify-content-end">
+                                    <button class="btn btn-link" id="edit-comment-btn-@comment.CommentId">Edit</button>
+
+                                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#deleteModal">
+                                        Delete
+                                    </button>
+
+                                    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteModalLongTitle">Remove Comment?</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to permanently delete this comment?
+                                                    <br />
+                                                    <br />
+                                                    <span class="lead">"@comment.Content"</span>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                    <form asp-controller="Comments" asp-action="DeleteComment" asp-route-id="@comment.CommentId"                method="post">
+                                                        <button class="btn btn-danger">Delete</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                            <hr />
+                        </div>
+                    </li>
+                    }
+
+                </ul>
+            }
+
+        </div>
     </div>
-    <div>
-        <a asp-action="Delete" asp-route-id="@Model.Topic.TopicId" class="btn btn-sm btn-danger">Delete</a>
-    </div>
- }
+</div>
+
+

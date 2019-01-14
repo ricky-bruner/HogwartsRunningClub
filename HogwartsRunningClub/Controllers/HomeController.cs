@@ -11,6 +11,10 @@ using Microsoft.AspNetCore.Authorization;
 using HogwartsRunningClub.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using HogwartsRunningClub.Models.ViewModels.PaginationModels;
+using Microsoft.EntityFrameworkCore.Internal;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace HogwartsRunningClub.Controllers
 {
@@ -36,7 +40,10 @@ namespace HogwartsRunningClub.Controllers
 
             ApplicationUser user = await GetCurrentUserAsync();
 
-            user.UserTopics = _context.Topic.Where(t => t.UserId == user.Id).ToList();
+            user.UserTopics = _context.Topic
+                .Include(t => t.Comments)
+                .Where(t => t.UserId == user.Id)
+                .ToList();
 
             if (user.HouseId != null) 
             { 
@@ -92,7 +99,7 @@ namespace HogwartsRunningClub.Controllers
         }
 
 
-        public async Task<IActionResult> ViewGreatHall(int? page, string category) 
+        public async Task<IActionResult> ViewGreatHall(int? page, string category, string search) 
         {
             ApplicationUser user = await GetCurrentUserAsync();
             
@@ -101,9 +108,23 @@ namespace HogwartsRunningClub.Controllers
             List<TopicCategory> categories = await _context.TopicCategory.ToListAsync();
             
             List<Topic> topics = new List<Topic>();
-            if (category == "All")
+
+            if (search != null) 
             {
                 topics = await _context.Topic
+                        .Include(t => t.Comments)
+                        .ThenInclude(c => c.User)
+                        .Include(t => t.User)
+                        .ThenInclude(u => u.House)
+                        .OrderByDescending(t => t.DateCreated)
+                        .Where(t => t.HouseExclusive == false && t.Title.Contains(search) || t.Content.Contains(search))
+                        .ToListAsync();
+            }
+            else if (category == "All")
+            {
+                topics = await _context.Topic
+                        .Include(t => t.Comments)
+                        .ThenInclude(c => c.User)
                         .Include(t => t.User)
                         .ThenInclude(u => u.House)
                         .OrderByDescending(t => t.DateCreated)
@@ -114,6 +135,8 @@ namespace HogwartsRunningClub.Controllers
             {
                 TopicCategory tc = categories.Where(cat => cat.Label == category).SingleOrDefault();
                 topics = await _context.Topic
+                    .Include(t => t.Comments)
+                    .ThenInclude(c => c.User)
                     .Include(t => t.User)
                     .ThenInclude(u => u.House)
                     .OrderByDescending(t => t.DateCreated)
@@ -128,7 +151,10 @@ namespace HogwartsRunningClub.Controllers
             GreatHallViewModel viewmodel = new GreatHallViewModel
             {
                 User = user,
-                NonExclusiveTopics = topics.Skip((pager.CurrentPage - 1) * pager.PageSize).Take(pager.PageSize).ToList(),
+                NonExclusiveTopics = topics
+                    .Skip((pager.CurrentPage - 1) * pager.PageSize)
+                    .Take(pager.PageSize)
+                    .ToList(),
                 Houses = houses,
                 TopicCategories = categories,
                 Pager = pager,
@@ -149,9 +175,12 @@ namespace HogwartsRunningClub.Controllers
             List<TopicCategory> categories = await _context.TopicCategory.ToListAsync();
 
             List<Topic> topics = new List<Topic>();
+
             if (category == "All")
             {
                 topics = await _context.Topic
+                        .Include(t => t.Comments)
+                        .ThenInclude(c => c.User)
                         .Include(t => t.User)
                         .ThenInclude(u => u.House)
                         .OrderByDescending(t => t.DateCreated)
@@ -160,8 +189,13 @@ namespace HogwartsRunningClub.Controllers
             }
             else
             {
-                TopicCategory tc = categories.Where(cat => cat.Label == category).SingleOrDefault();
+                TopicCategory tc = categories
+                    .Where(cat => cat.Label == category)
+                    .SingleOrDefault();
+
                 topics = await _context.Topic
+                    .Include(t => t.Comments)
+                    .ThenInclude(c => c.User)
                     .Include(t => t.User)
                     .ThenInclude(u => u.House)
                     .OrderByDescending(t => t.DateCreated)
@@ -174,8 +208,13 @@ namespace HogwartsRunningClub.Controllers
             CommonRoomViewModel viewmodel = new CommonRoomViewModel
             {
                 House = house,
-                HouseTopics = topics.Skip((pager.CurrentPage - 1) * pager.PageSize).Take(pager.PageSize).ToList(),
-                HouseMembers = await _context.ApplicationUser.Where(u => u.HouseId == house.HouseId).ToListAsync(),
+                HouseTopics = topics
+                    .Skip((pager.CurrentPage - 1) * pager.PageSize)
+                    .Take(pager.PageSize)
+                    .ToList(),
+                HouseMembers = await _context.ApplicationUser
+                    .Where(u => u.HouseId == house.HouseId)
+                    .ToListAsync(),
                 TopicCategories = categories,
                 Pager = pager,
                 Category = category,
@@ -183,6 +222,20 @@ namespace HogwartsRunningClub.Controllers
 
 
             return View("CommonRoom", viewmodel);
+        }
+
+        public Task<string> Giphy(string q)
+        {
+
+            string randomNotVeryImportantThingAtAll = "2hQWf6oBnBjUicY5yBYwgVT9ecVh5X9y";
+
+            string url = "http://api.giphy.com/v1/gifs/search?q=" + q + "&api_key=" + randomNotVeryImportantThingAtAll + "&limit=20";
+
+            HttpClient http = new HttpClient();
+            
+            var results = http.GetAsync(url).Result.Content.ReadAsStringAsync();
+
+            return results;
         }
 
         public IActionResult Privacy()

@@ -44,9 +44,17 @@ namespace HogwartsRunningClub.Controllers
             Topic topic = await _context.Topic
                 .Include(t => t.TopicCategory)
                 .Include(t => t.User)
+                .ThenInclude(u => u.House)
+                .Include(t => t.Comments)
+                .ThenInclude(c => c.User)
+                .ThenInclude(u => u.House)
                 .FirstOrDefaultAsync(m => m.TopicId == id);
 
+            topic.Comments = topic.Comments.OrderByDescending(c => c.DateCreated).ToList();
+
             ApplicationUser user = await GetCurrentUserAsync();
+            House house = await _context.House.SingleOrDefaultAsync(h => h.HouseId == user.HouseId);
+            user.House = house;
 
             if (topic == null)
             {
@@ -69,16 +77,26 @@ namespace HogwartsRunningClub.Controllers
             }
 
             viewmodel.Topic = topic;
+            viewmodel.User = user;
             
             _context.Update(topic);
             await _context.SaveChangesAsync();
+
+            ViewData["scripts"] = new List<string>() {
+                "HandleComments"
+            };
 
             return View(viewmodel);
         }
 
         // GET: Topics/Create
-        public async Task<IActionResult> Create(string id)
+        public async Task<IActionResult> Create(bool? House)
         {
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            House house = await _context.House.FirstOrDefaultAsync(h => h.HouseId == user.HouseId);
+            user.House = house;
+            
             CreateTopicViewModel viewmodel = new CreateTopicViewModel();
 
             List<TopicCategory> categories = await _context.TopicCategory.ToListAsync();
@@ -92,7 +110,7 @@ namespace HogwartsRunningClub.Controllers
                         };
             }).ToList();
 
-            if (id != null) 
+            if (House != false) 
             {
                 Topic topic = new Topic();
                 topic.HouseExclusive = true;
@@ -100,6 +118,7 @@ namespace HogwartsRunningClub.Controllers
             }
 
             viewmodel.CategoryOptions = categoryOptions;
+            viewmodel.User = user;
 
             return View(viewmodel);
         }
@@ -126,11 +145,11 @@ namespace HogwartsRunningClub.Controllers
 
                 if (viewmodel.Topic.HouseExclusive == true)
                 {
-                    return RedirectToAction("ViewCommonRoom", "Home");
+                    return RedirectToAction("ViewCommonRoom", "Home", new { category = "All"});
                 }
                 else
                 { 
-                    return RedirectToAction("ViewGreatHall", "Home");
+                    return RedirectToAction("ViewGreatHall", "Home", new { category = "All" });
                 }
 
             }
