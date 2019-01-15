@@ -21,6 +21,11 @@
     }
 </div>
 
+
+<textarea rows="5" class="form-control emojis-wysiwyg">Hello :neckbeard:</textarea>
+
+
+
 <div>
     <hr />
     <div class="topic-card" id="topic-@Model.Topic.TopicId">
@@ -38,9 +43,7 @@
                     <button class="btn btn-sm btn-@Model.User.House.Title" id="add-comment-btn">Comment</button>
                 </div>
             </div>
-            <form asp-controller="Comments" asp-action="CreateComment" asp-route-TopicId="@Model.Topic.TopicId" id="add-comment-form">
-                    
-            </form>
+            <form asp-controller="Comments" asp-action="CreateComment" asp-route-TopicId="@Model.Topic.TopicId" id="add-comment-form"></form>
         </div>
         <div id="comments-container">
             @if (Model.Topic.Comments.Count > 0)

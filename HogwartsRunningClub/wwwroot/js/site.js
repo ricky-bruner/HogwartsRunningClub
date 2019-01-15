@@ -4,17 +4,17 @@
 // Write your JavaScript code.
 
 
-fetch(`/home/giphy?q=harry+potter`)
-    .then(res => res.json())
-    .then(res => {
-        console.log(res)
-        res.data.map(gif => {
-            console.log(gif.url)
-            document.querySelector("#gifs").innerHTML += `
-                <img src="${gif.images.fixed_height.url}" alt="gif ${gif.title}"/>
-            `
-        })
-    });
+//fetch(`/home/giphy?q=harry+potter`)
+//    .then(res => res.json())
+//    .then(res => {
+//        console.log(res)
+//        res.data.map(gif => {
+//            console.log(gif.url)
+//            document.querySelector("#gifs").innerHTML += `
+//                <img src="${gif.images.fixed_height.url}" alt="gif ${gif.title}"/>
+//            `
+//        })
+//    });
 
 
 

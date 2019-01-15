@@ -6,15 +6,48 @@ document.querySelector("#comment-form").addEventListener("click", (e) => {
         let commentBtnContainer = document.querySelector("#add-comment-btn-container");
         let addCommentBtn = e.target.parentElement;
         commentBtnContainer.removeChild(addCommentBtn);
-        document.querySelector("#add-comment-form").innerHTML += `
-                <div class="form-group">
-                    <textarea class="form-control" placeholder="Keep is civil, make Dumbledore proud..." rows="5" id="comment-content" name="Content"></textarea>
-                </div>
-                <div class="d-flex justify-content-center">
-                    <button class="col-md-1 btn btn-sm btn-${house} mr-2" id="submit-comment-btn">Send</button>
-                    <button class="col-md-1 btn btn-sm btn-secondary mr-2" id="cancel-comment-btn">Cancel</button>
-                </div>
-        `
+        //document.querySelector("#add-comment-form").innerHTML += `
+        //        <div class="form-group">
+        //            <textarea class="form-control emojis-wysiwyg" placeholder="Keep is civil, make Dumbledore proud..." rows="5" id="comment-content" name="Content"></textarea>
+                    
+        //        </div>
+        //        <div class="d-flex justify-content-center">
+        //            <button class="col-md-1 btn btn-sm btn-${house} mr-2" id="submit-comment-btn">Send</button>
+        //            <button class="col-md-1 btn btn-sm btn-secondary mr-2" id="cancel-comment-btn">Cancel</button>
+        //        </div>
+        //`
+
+        let textDiv = document.createElement("div");
+        textDiv.setAttribute("class", "form-group");
+
+        let textarea = document.createElement("textarea");
+        textarea.setAttribute("class", "form-control emojis-wysiwyg");
+        textarea.setAttribute("placeholder", "Keep is civil, make Dumbledore proud...");
+        textarea.setAttribute("rows", 5);
+        textarea.setAttribute("id", "comment-content");
+        textarea.setAttribute("name", "Content");
+
+        textDiv.appendChild(textarea);
+
+        let buttonsDiv = document.createElement("div");
+        buttonsDiv.setAttribute("class", "d-flex justify-content-center");
+
+        let sendBtn = document.createElement("button");
+        sendBtn.setAttribute("class", `col-md-1 btn btn-sm btn-${house} mr-2`);
+        sendBtn.setAttribute("id", "submit-comment-btn");
+        sendBtn.textContent = "Send";
+
+        let cancelBtn = document.createElement("button");
+        cancelBtn.setAttribute("class", "col-md-1 btn btn-sm btn-secondary mr-2");
+        cancelBtn.setAttribute("id", "cancel-comment-btn");
+        cancelBtn.textContent = "Cancel";
+
+        buttonsDiv.appendChild(sendBtn);
+        buttonsDiv.appendChild(cancelBtn);
+
+        document.querySelector("#add-comment-form").appendChild(textDiv);
+        document.querySelector("#add-comment-form").appendChild(buttonsDiv);
+
     }
 
     if (e.target.id === "cancel-comment-btn") {
@@ -47,11 +80,14 @@ document.querySelector("#comments-container").addEventListener("click", (e) => {
         let content = contentElement.textContent;
         contentElement.textContent = "";
         document.querySelector(`#edit-comment-form-${id}`).innerHTML += `
-                <textarea name="Content" class="form-control" rows="5">${content}</textarea>
+                <div class="example">
+                    <textarea name="Content" class="form-control emojis-wysiwyg" rows="5">${content}</textarea>
+                </div>
                 <div class="d-flex justify-content-center">
                     <button class="btn btn-sm btn-${house} mt-2 mr-2">Save Changes</button>
                     <button class="btn btn-sm btn-secondary mt-2 mr-2" id="cancel-edit-btn-${id}">Cancel</button>
                 </div>
+
             `;
     }
 
