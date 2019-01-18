@@ -1,19 +1,21 @@
 ﻿
 
+//hide the forms on load. Did this way because emoji picker only renders and functions properly on elements on the DOM at load.
 $("#add-comment-form-container").hide();
 $(".edit-comment-container").hide();
 
+
+// Hide the button, show the form when adding a comment
 $("#add-comment-btn").on("click", () => {
     $("#add-comment-form-container").show();
     $("#add-comment-btn-container").hide();
 })
 
 
-
-
-
+// event listener for adding comment form
 $("#comment-form").on("click", (e) => {
 
+    // if cancel is clicked, prevent form submission and reset the value of the 'textarea', then show/hide the form and button back around
     if (e.target.id === "cancel-comment-btn") {
         e.preventDefault();
         $("#add-comment-form .emoji-wysiwyg-editor").html("");
@@ -21,79 +23,15 @@ $("#comment-form").on("click", (e) => {
         $("#add-comment-btn-container").show();
     }
 
-
-
-    //if (e.target.id === "add-comment-btn") {
-    //    let house = e.target.classList[2].split("-")[1];
-    //    let commentBtnContainer = document.querySelector("#add-comment-btn-container");
-    //    let addCommentBtn = e.target.parentElement;
-    //    commentBtnContainer.removeChild(addCommentBtn);
-    //    document.querySelector("#add-comment-form").innerHTML += `
-    //            <div class="form-group">
-    //                <textarea class="form-control emojis-wysiwyg" placeholder="Keep is civil, make Dumbledore proud..." rows="5" id="comment-content" name="Content"></textarea>
-                    
-    //            </div>
-    //            <div class="d-flex justify-content-center">
-    //                <button class="col-md-1 btn btn-sm btn-${house} mr-2" id="submit-comment-btn">Send</button>
-    //                <button class="col-md-1 btn btn-sm btn-secondary mr-2" id="cancel-comment-btn">Cancel</button>
-    //            </div>
-    //    `
-
-    //    let textDiv = document.createElement("div");
-    //    textDiv.setAttribute("class", "form-group");
-
-    //    let textarea = document.createElement("textarea");
-    //    textarea.setAttribute("class", "form-control emojis-wysiwyg");
-    //    textarea.setAttribute("placeholder", "Keep is civil, make Dumbledore proud...");
-    //    textarea.setAttribute("rows", 5);
-    //    textarea.setAttribute("id", "comment-content");
-    //    textarea.setAttribute("name", "Content");
-
-    //    textDiv.appendChild(textarea);
-
-    //    let buttonsDiv = document.createElement("div");
-    //    buttonsDiv.setAttribute("class", "d-flex justify-content-center");
-
-    //    let sendBtn = document.createElement("button");
-    //    sendBtn.setAttribute("class", `col-md-1 btn btn-sm btn-${house} mr-2`);
-    //    sendBtn.setAttribute("id", "submit-comment-btn");
-    //    sendBtn.textContent = "Send";
-
-    //    let cancelBtn = document.createElement("button");
-    //    cancelBtn.setAttribute("class", "col-md-1 btn btn-sm btn-secondary mr-2");
-    //    cancelBtn.setAttribute("id", "cancel-comment-btn");
-    //    cancelBtn.textContent = "Cancel";
-
-    //    buttonsDiv.appendChild(sendBtn);
-    //    buttonsDiv.appendChild(cancelBtn);
-
-    //    document.querySelector("#add-comment-form").appendChild(textDiv);
-    //    document.querySelector("#add-comment-form").appendChild(buttonsDiv);
-
-    //}
-
-    //if (e.target.id === "cancel-comment-btn") {
-    //    e.preventDefault();
-    //    let house = document.querySelector("#submit-comment-btn").classList[3].split("-")[1];
-    //    let form = document.querySelector("#add-comment-form")
-    //    let antiForgeryInput = form.children[0];
-    //    form.innerHTML = "";
-    //    form.appendChild(antiForgeryInput);
-    //    document.querySelector("#add-comment-btn-container").innerHTML = `
-    //        <div class="form-group row justify-content-md-center">
-    //            <button class="btn btn-sm btn-${house}" id="add-comment-btn">Comment</button>
-    //        </div>    
-    //    `
-    //}
-
 });
 
+// scoped here so that comment can be retained for cancel without needing to do a fetch call
 let commentContent = "";
 
-
-
+//event listener for entire comments container to handle edits
 $("#comments-container").on("click", (e) => {
 
+    // when edit is clicked, disable the button, set the global variable with the original comment, hide content and show form
     if (e.target.id.includes("edit-comment-btn")) {
 
         e.target.setAttribute("disabled", true);
@@ -106,31 +44,7 @@ $("#comments-container").on("click", (e) => {
         $(`#edit-comment-form-${id}`).show();
     }
 
-    //if (e.target.id.includes("edit-comment-btn")) {
-    //    let id = e.target.id.split("-")[3];
-    //    let house = "";
-    //    if (document.querySelector(`#add-comment-btn`) !== null) {
-    //        house = document.querySelector(`#add-comment-btn`).classList[2].split("-")[1];
-    //    } else {
-    //        house = document.querySelector(`#submit-comment-btn`).classList[3].split("-")[1]
-    //    }
-    //    e.target.setAttribute("disabled", true);
-    //    let contentElement = document.querySelector(`#comment-content-${id}`);
-    //    let content = contentElement.innerHTML;
-
-    //    contentElement.textContent = "";
-    //    document.querySelector(`#edit-comment-form-${id}`).innerHTML += `
-    //        <div class="example">
-    //            <textarea name="Content" class="form-control emojis-wysiwyg" rows="5">${content}</textarea>
-    //        </div>
-    //        <div class="d-flex justify-content-center">
-    //            <button class="btn btn-sm btn-${house} mt-2 mr-2">Save Changes</button>
-    //            <button class="btn btn-sm btn-secondary mt-2 mr-2" id="cancel-edit-btn-${id}">Cancel</button>
-    //        </div>
-
-    //    `;
-    //}
-
+    // cancel is clicked, prevent submission, reactivate edit btn, reset textarea back to back to original value, and show/hide the form/content
     if (e.target.id.includes("cancel-edit-btn")) {
         e.preventDefault();
 
@@ -140,31 +54,27 @@ $("#comments-container").on("click", (e) => {
         $(`#edit-comment-form-${id} .emoji-wysiwyg-editor`).html(commentContent);
         $(`#edit-comment-form-${id}`).hide();
         $(`#comment-content-${id}`).show();
-        //let contentElement = document.querySelector(`#comment-content-${id}`);
-        //let editForm = document.querySelector(`#edit-comment-form-${id}`);
-        //let antiForgeryInput = editForm.children[0];
-        //let remoteURL = "http://localhost:5000";
-        //fetch(`${remoteURL}/comments/getcomment/${id}`)
-        //    .then(res => res.json())
-        //    .then(res => {
-        //        editForm.innerHTML = "";
-        //        editForm.appendChild(antiForgeryInput);
-        //        contentElement.textContent = res.content;
-        //        document.querySelector(`#edit-comment-btn-${id}`).disabled = false;
-        //    })
     }
 })
 
-
+// grab all comment text from DOM
 let leads = document.querySelectorAll(".emoji-convert");
 
+// loop over, searching for emoji text
 leads.forEach(lead => {
+    // emoji text ex. ":smiley:"
     if (lead.textContent.includes(":")) {
+        //grab original text
         let text = lead.innerHTML;
+        // create array to recieve requisite emojis
         let emojis = [];
+        // loop over list of emojis from emojis.js
         $.emojiarea.icons.map(grouping => {
+            // grab emoji name keys only for comparison
             let keyArray = Object.keys(grouping.icons);
+            // loop over this array in search of matching emojis
             keyArray.map(key => {
+                // build a better emoji object
                 if (text.includes(key)) {
                     let emoji = {
                         name: key,
@@ -175,24 +85,35 @@ leads.forEach(lead => {
             })
         })
 
+        // loop over emojis array and split the text, inserting images where text had been for each emoji
         emojis.map(emoji => {
+
             let splitIndex = text.split(emoji.name);
-            console.log(splitIndex)
+
             let newText = ""
+
+            // fixer for if more than one of same emoji
             if (splitIndex.length > 2) {
+
+                // start off with first two index, adding first emoji img where text was
                 newText = text.split(emoji.name)[0] + emoji.img + text.split(emoji.name)[1];
+
+                // for each index after initial two, add on an img and then remaining index
                 for (let i = 2; i < splitIndex.length; i++) {
-                    if (i === splitIndex.length - 1) {
-                        newText += emoji.img + text.split(emoji.name)[i]
-                    } else {
-                        newText += emoji.img + text.split(emoji.name)[i]
-                    }
+                    newText += emoji.img + text.split(emoji.name)[i]
                 }
+
             } else {
+
+                // if not duplicating
                 newText = text.split(emoji.name)[0] + emoji.img + text.split(emoji.name)[1];
             }
+
+            // set text to equal new version with img instead of text, then move on to the next emoji is needed
             text = newText;
         })
+
+        // replace original text with new emoji text
         lead.innerHTML = text;
     }
 })
