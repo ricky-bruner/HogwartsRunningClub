@@ -412,7 +412,7 @@
         }
         groups.push('<ul class="group-selector">');
         for (var group in options) {
-            groups.push('<a href="#group_' + group + '" class="tab_switch"><li>' + options[group]['name'] + '</li></a>');
+            groups.push('<a href="#group_' + group + '" onclick="event.preventDefault();" class="tab_switch"><li>' + options[group]['name'] + '</li></a>');
             html.push('<div class="select_group" group="' + group + '" id="group_' + group + '">');
             for (var key in options[group]['icons']) {
                 if (options[group]['icons'].hasOwnProperty(key)) {
